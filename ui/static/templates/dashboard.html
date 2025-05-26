@@ -1,0 +1,594 @@
+{% extends "base.html" %}
+{% load static %}
+{% load plotly_dash %}
+{% block extra_css %}
+<link href="{% static 'css/output.css' %}" rel="stylesheet"/>
+{% endblock extra_css %}
+{% block content %}
+<section id="inner-headline">
+   <div class="container">
+      <div class="row">
+         <div class="col-lg-12">
+            <h2 class="pageTitle">Dashboard</h2>
+         </div>
+      </div>
+   </div>
+</section>
+<section>
+   <div class="container">
+   <!-- Monitoring Section -->
+   <div class="mb-8">
+      <h3 class="text-2xl font-bold text-gray-800">Monitoring Section</h3>
+      <div class="bg-white rounded-lg shadow p-6 dark:bg-gray-800">
+         <div id="monitoring-chart-container">
+            <div class="min-h-screen flex flex-col items-center justify-center">
+               <!-- New tab navigation -->
+               <div class="w-full max-w-7xl mb-4">
+                  <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+                     <!-- Dynamic Tabs -->
+                     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist" style="gap: 1rem;">
+                        {% for param in parameters %}
+                        <li role="presentation">
+                           <button class="text-gray-700 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-lg px-5 py-2.5" 
+                              id="{{ param }}-tab" 
+                              data-tabs-target="#{{ param }}" 
+                              data-series="{{ param }}"
+                              type="button" 
+                              role="tab" 
+                              aria-controls="{{ param }}" 
+                              aria-selected="{{ forloop.first|yesno:'true,false' }}">{{ param|capfirst }}</button>
+                        </li>
+                        {% endfor %}
+                     </ul>
+                  </div>
+                  <div id="default-tab-content" style="display: none;">
+                     {% for param in parameters %}
+                        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="{{ param }}" role="tabpanel" aria-labelledby="{{ param }}-tab">
+                           
+                        </div>
+                     {% endfor %}
+                  </div>
+               </div>
+               <!-- Existing dropdown toggle button -->
+               <div class="w-full max-w-7xl mb-4">
+                  <button id="dropdownToggleButton" data-dropdown-toggle="dropdownToggle" class="text-2xl text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-6 py-3 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                     Farms 
+                     <svg class="w-4 h-4 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                     </svg>
+                  </button>
+                  <!-- Dropdown menu -->
+                  <div id="dropdownToggle" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-72 dark:bg-gray-700 dark:divide-gray-600">
+                     <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownToggleButton">
+                        <li>
+                           <div class="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                              <label class="inline-flex items-center w-full cursor-pointer">
+                                 <input type="checkbox" checked value="df1" class="sr-only peer chart-toggle" data-series="df1">
+                                 <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:translate-x-[-100%] peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-500 peer-checked:bg-blue-600"></div>
+                                 <span class="ms-3 text-xl font-medium text-gray-900 dark:text-gray-300">Germany Farm</span>
+                              </label>
+                           </div>
+                        </li>
+                        <li>
+                           <div class="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                              <label class="inline-flex items-center w-full cursor-pointer">
+                                 <input type="checkbox" checked value="df2" class="sr-only peer chart-toggle" data-series="df2">
+                                 <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:translate-x-[-100%] peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-500 peer-checked:bg-blue-600"></div>
+                                 <span class="ms-3 text-xl font-medium text-gray-900 dark:text-gray-300">Poland Farm</span>
+                              </label>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="max-w-7xl w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+                  <div class="flex justify-between">
+                     <div>
+                        <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">32.4k</h5>
+                        <p class="text-xl font-normal text-gray-500 dark:text-gray-400">Users this week</p>
+                     </div>
+                     <div class="statistics">
+                        <div id="germanyStats">
+                           <span id="germanyMax" style="color: #1A56DB;">Max: 0</span>
+                           <span id="germanyMin" class="mx-4" style="color: #1A56DB;">Min: 0</span>
+                           <span id="germanyMean" style="color: #1A56DB;">Mean: 0</span>
+                        </div>
+                        <div id="polandStats">
+                           <span id="polandMax" style="color: #7E3AF2;">Max: 0</span>
+                           <span id="polandMin" class="mx-4" style="color: #7E3AF2;">Min: 0</span>
+                           <span id="polandMean" style="color: #7E3AF2;">Mean: 0</span>
+                        </div>
+                     </div>
+                  </div>
+                  <div id="area-chart"></div>
+                  <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
+                     <div class="flex justify-between items-center pt-5">
+                        <!-- Button -->
+                        <button
+                           id="dropdownDefaultButton"
+                           data-dropdown-toggle="lastDaysdropdown"
+                           data-dropdown-placement="bottom"
+                           class="text-xl font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
+                           type="button">
+                           Last 7 days
+                           <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                           </svg>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div id="lastDaysdropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                           <ul class="py-2 text-xl text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                              <li>
+                                 <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" data-days="1">Yesterday</a>
+                              </li>
+                              <li>
+                                 <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" data-days="0">Today</a>
+                              </li>
+                              <li>
+                                 <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" data-days="7">Last 7 days</a>
+                              </li>
+                              <li>
+                                 <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" data-days="30">Last 30 days</a>
+                              </li>
+                              <li>
+                                 <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" data-days="90">Last 90 days</a>
+                              </li>
+                           </ul>
+                        </div>
+                        <a
+                           href="#"
+                           class="uppercase text-xl font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
+                           Users Report
+                           <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                           </svg>
+                        </a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Modeling Section -->
+{% comment %} 
+   <div class="mb-8">
+      <h3 class="text-2xl font-bold text-gray-800">Modeling Section</h3>
+      <div class="bg-white rounded-lg shadow p-6 dark:bg-gray-800">
+         <div id="modeling-chart-container">
+
+            <div class="min-h-screen flex flex-col items-center justify-center">
+                <!-- New tab navigation -->
+                <div class="w-full max-w-7xl mb-4">
+                    <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+                    <!-- Static Tab for THI Index -->
+                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist" style="gap: 1rem;">
+                        <li role="presentation">
+                            <button class="text-gray-700 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-lg px-5 py-2.5" 
+                                id="thi-tab" 
+                                data-tabs-target="#thi" 
+                                type="button" 
+                                role="tab" 
+                                aria-controls="thi" 
+                                aria-selected="true">THI Index</button>
+                        </li>
+                    </ul>
+                    </div>
+                    <div id="default-tab-content">
+                    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="thi" role="tabpanel" aria-labelledby="thi-tab">
+                        <h3 class="text-xl font-bold">THI Index</h3>
+                        <div id="thi-chart-container">
+                            <!-- Chart will be rendered here -->
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!-- Existing dropdown toggle button -->
+                <div class="w-full max-w-7xl mb-4">
+                   <button id="dropdownToggleButton" data-dropdown-toggle="dropdownToggle" class="text-2xl text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-6 py-3 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                      Farms 
+                      <svg class="w-4 h-4 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                      </svg>
+                   </button>
+                   <!-- Dropdown menu -->
+                   <div id="dropdownToggle" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-72 dark:bg-gray-700 dark:divide-gray-600">
+                      <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownToggleButton">
+                         <li>
+                            <div class="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                               <label class="inline-flex items-center w-full cursor-pointer">
+                                  <input type="checkbox" checked value="df1" class="sr-only peer chart-toggle" data-series="df1">
+                                  <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:translate-x-[-100%] peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-500 peer-checked:bg-blue-600"></div>
+                                  <span class="ms-3 text-xl font-medium text-gray-900 dark:text-gray-300">Germany Farm</span>
+                               </label>
+                            </div>
+                         </li>
+                         <li>
+                            <div class="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                               <label class="inline-flex items-center w-full cursor-pointer">
+                                  <input type="checkbox" checked value="df2" class="sr-only peer chart-toggle" data-series="df2">
+                                  <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:translate-x-[-100%] peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-500 peer-checked:bg-blue-600"></div>
+                                  <span class="ms-3 text-xl font-medium text-gray-900 dark:text-gray-300">Poland Farm</span>
+                               </label>
+                            </div>
+                         </li>
+                      </ul>
+                   </div>
+                </div>
+                <div class="max-w-7xl w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+                   <div class="flex justify-between">
+                      <div>
+                         <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">32.4k</h5>
+                         <p class="text-xl font-normal text-gray-500 dark:text-gray-400">Users this week</p>
+                      </div>
+                      <div class="statistics">
+                         <div id="germanyStats">
+                            <span id="germanyMax" style="color: #1A56DB;">Max: 0</span>
+                            <span id="germanyMin" class="mx-4" style="color: #1A56DB;">Min: 0</span>
+                            <span id="germanyMean" style="color: #1A56DB;">Mean: 0</span>
+                         </div>
+                         <div id="polandStats">
+                            <span id="polandMax" style="color: #7E3AF2;">Max: 0</span>
+                            <span id="polandMin" class="mx-4" style="color: #7E3AF2;">Min: 0</span>
+                            <span id="polandMean" style="color: #7E3AF2;">Mean: 0</span>
+                         </div>
+                      </div>
+                   </div>
+                   <div id="area-chart"></div>
+                   <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
+                      <div class="flex justify-between items-center pt-5">
+                         <!-- Button -->
+                         <button
+                            id="dropdownDefaultButton"
+                            data-dropdown-toggle="lastDaysdropdown"
+                            data-dropdown-placement="bottom"
+                            class="text-xl font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
+                            type="button">
+                            Last 7 days
+                            <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                         </button>
+                         <!-- Dropdown menu -->
+                         <div id="lastDaysdropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                            <ul class="py-2 text-xl text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                               <li>
+                                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" data-days="1">Yesterday</a>
+                               </li>
+                               <li>
+                                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" data-days="0">Today</a>
+                               </li>
+                               <li>
+                                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" data-days="7">Last 7 days</a>
+                               </li>
+                               <li>
+                                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" data-days="30">Last 30 days</a>
+                               </li>
+                               <li>
+                                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" data-days="90">Last 90 days</a>
+                               </li>
+                            </ul>
+                         </div>
+                         <a
+                            href="#"
+                            class="uppercase text-xl font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
+                            Users Report
+                            <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                            </svg>
+                         </a>
+                      </div>
+                   </div>
+                </div>
+             </div>
+
+         </div>
+      </div>
+   </div>
+    {% endcomment %}
+</section>
+<script src="{% static 'js/apexcharts.min.js' %}"></script>
+<script src="{% static 'js/flowbite.min.js' %}"></script>
+<script>
+   var chartData = JSON.parse('{{ chart_data|escapejs }}');
+   var chart;
+   // var THIData = JSON.parse('{{ thi_data|escapejs }}');
+   
+   const options = {
+       chart: {
+           height: "100%",
+           maxWidth: "100%",
+           type: "area",
+           fontFamily: "Inter, sans-serif",
+           dropShadow: {
+               enabled: false,
+           },
+           toolbar: {
+               show: false,
+           },
+           animations: { // Disable animations
+               enabled: false
+           },
+       },
+       tooltip: {
+           enabled: true,
+           x: {
+               show: false,
+           },
+       },
+       fill: {
+           type: "gradient",
+           gradient: {
+               opacityFrom: 0.55,
+               opacityTo: 0,
+               shade: "#1C64F2",
+               gradientToColors: ["#1C64F2"],
+           },
+       },
+       dataLabels: {
+           enabled: false,
+       },
+       stroke: {
+           width: 3,
+           curve: 'smooth'
+       },
+       grid: {
+           show: true,
+           borderColor: '#e2e8f0',
+           strokeDashArray: 4,
+           position: 'back',
+           xaxis: {
+               lines: {
+                   show: false
+               }
+           },
+           yaxis: {
+               lines: {
+                   show: true
+               }
+           },
+           padding: {
+               left: 2,
+               right: 2,
+               top: 0
+           },
+       },
+       series: [
+           {
+               name: "Germany Farm",
+               data: chartData[0].values_co2,
+               color: "#1A56DB",
+           },
+           {
+               name: "Poland Farm",
+               data: chartData[1].values_co2,
+               color: "#7E3AF2",
+           }
+       ],
+       xaxis: {
+           categories: [],
+           labels: {
+               show: false,
+           },
+           axisBorder: {
+               show: false,
+           },
+           axisTicks: {
+               show: false,
+           },
+       },
+       
+       yaxis: {
+           show: true,
+           labels: {
+               show: true,
+               style: {
+                   fontSize: '12px',
+                   colors: '#64748B'
+               },
+               formatter: function(value) {
+                   return value.toFixed(2);
+               }
+           },
+           axisBorder: {
+               show: false
+           },
+           axisTicks: {
+               show: false
+           },
+           crosshairs: {
+               show: false
+           },
+           lines: {
+               show: false
+           }
+       }
+   }
+   
+   // Initialize chart
+   if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') {
+       chart = new ApexCharts(document.getElementById("area-chart"), options);
+       chart.render();
+   }
+   
+   // Updated toggle section for both datasets
+   document.querySelectorAll('.chart-toggle').forEach(toggle => {
+       toggle.addEventListener('change', function() {
+           const seriesName = this.dataset.series;
+           const isChecked = this.checked;
+           
+           if (seriesName === 'df1') {
+               if (isChecked) {
+                   chart.showSeries('Germany Farm');
+               } else {
+                   chart.hideSeries('Germany Farm');
+               }
+           } else if (seriesName === 'df2') {
+               if (isChecked) {
+                   chart.showSeries('Poland Farm');
+               } else {
+                   chart.hideSeries('Poland Farm');
+               }
+           }
+       });
+   });
+   
+   // Variable to keep track of the active series
+   let activeSeries = 'co2'; // Default to CO2
+   let selectedDays = 7; // Default to 7 days
+   
+   // Update tab click handling to switch between CO2 and NH3
+   const tabButtons = document.querySelectorAll('[role="tab"]');
+   
+   tabButtons.forEach(button => {
+       button.addEventListener('click', () => {
+           // Handle active state styling
+           tabButtons.forEach(btn => {
+               btn.classList.remove('text-white', 'bg-blue-700', 'hover:bg-blue-800', 'dark:bg-blue-600', 'dark:hover:bg-blue-700');
+               btn.classList.add('text-gray-700', 'bg-gray-100', 'hover:bg-gray-200', 'dark:text-gray-400', 'dark:bg-gray-700', 'dark:hover:bg-gray-600');
+           });
+           
+           button.classList.remove('text-gray-700', 'bg-gray-100', 'hover:bg-gray-200', 'dark:text-gray-400', 'dark:bg-gray-700', 'dark:hover:bg-gray-600');
+           button.classList.add('text-white', 'bg-blue-700', 'hover:bg-blue-800', 'dark:bg-blue-600', 'dark:hover:bg-blue-700');
+   
+           // Update active series based on selected tab
+           activeSeries = button.dataset.series;
+   
+           // Fetch chart data based on selected days
+           fetchChartData(selectedDays); // Use the stored selected days
+       });
+   });
+   
+   // Set initial active tab
+   const initialActiveTab = document.querySelector('[aria-selected="true"]') || tabButtons[0];
+   initialActiveTab.click();
+   
+   // Fetch chart data based on selected days
+   function fetchChartData(days) {
+       fetch(`/api/getChartData?days=${days}`)
+           .then(response => response.json())
+           .then(data => {
+               // Update chart with data
+               chart.updateOptions({
+                   series: [
+                       {
+                           name: "Germany Farm",
+                           data: data.data[0][`values_${activeSeries}`], // Use the selected series dynamically
+                           color: "#1A56DB",
+                       },
+                       {
+                           name: "Poland Farm",
+                           data: data.data[1][`values_${activeSeries}`], // Use the selected series dynamically
+                           color: "#7E3AF2",
+                       }
+                   ],
+                   xaxis: {
+                       categories: data.data[0].dates,
+                   }
+               });
+   
+               // Update statistics display for Germany
+               const statsGermany = data.statistics['Germany Farm'][`values_${activeSeries}`];
+               document.getElementById('germanyMax').innerText = `Max: ${statsGermany.max.toFixed(2)}`;
+               document.getElementById('germanyMin').innerText = `Min: ${statsGermany.min.toFixed(2)}`;
+               document.getElementById('germanyMean').innerText = `Mean: ${statsGermany.mean.toFixed(2)}`;
+   
+               // Update statistics display for Poland
+               const statsPoland = data.statistics['Poland Farm'][`values_${activeSeries}`];
+               document.getElementById('polandMax').innerText = `Max: ${statsPoland.max.toFixed(2)}`;
+               document.getElementById('polandMin').innerText = `Min: ${statsPoland.min.toFixed(2)}`;
+               document.getElementById('polandMean').innerText = `Mean: ${statsPoland.mean.toFixed(2)}`;
+           })
+           .catch(error => console.error('Error fetching chart data:', error));
+   }
+   
+   // Update dropdown click handling
+   const dropdownItems = document.querySelectorAll('#lastDaysdropdown a');
+   dropdownItems.forEach(item => {
+       item.addEventListener('click', (event) => {
+           event.preventDefault();
+           const days = item.dataset.days;
+           selectedDays = days; // Update the selected days variable
+           fetchChartData(selectedDays); // Fetch data based on selected days
+           
+           // Update the button text to reflect the selected option
+           const button = document.getElementById('dropdownDefaultButton');
+           const arrow = button.querySelector('svg');
+   
+           // Update only the text node, preserving the SVG
+           button.childNodes[0].nodeValue = item.innerText; // Update the text node
+   
+           // Ensure the arrow remains visible
+           if (arrow) {
+               arrow.classList.remove('hidden'); // Ensure the arrow is visible
+               arrow.style.display = 'inline'; // Explicitly set display to inline
+           }
+       });
+   });
+   
+   // Ensure the arrow is visible on page load
+   const initialArrow = document.querySelector('#dropdownDefaultButton svg');
+   if (initialArrow) {
+       initialArrow.style.display = 'inline'; // Ensure the arrow is displayed inline
+   }
+
+   /* function fetchTHIData() {
+    fetch('/api/calculate_thi/')
+        .then(response => response.json())
+        .then(data => {
+            // Extract timestamps and THI values for both Germany and Poland
+            const germanyTimestamps = data.Germany.map(item => new Date(item.Timestamp));
+            const germanyTHIValues = data.Germany.map(item => item.THI);
+            const polandTimestamps = data.Poland.map(item => new Date(item.Timestamp));
+            const polandTHIValues = data.Poland.map(item => item.THI);
+
+            // Render the chart
+            const ctx = document.createElement('canvas');
+            document.getElementById('thi-chart-container').innerHTML = ''; // Clear previous content
+            document.getElementById('thi-chart-container').appendChild(ctx);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: germanyTimestamps, // Use Germany timestamps for x-axis
+                    datasets: [
+                        {
+                            label: 'Germany THI Index',
+                            data: germanyTHIValues,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderWidth: 1,
+                        },
+                        {
+                            label: 'Poland THI Index',
+                            data: polandTHIValues,
+                            borderColor: 'rgba(255, 99, 132, 1)', // Different color for Poland
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderWidth: 1,
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'hour'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching THI data:', error));
+}
+
+// Call the function when the THI tab is clicked
+document.getElementById('thi-tab').addEventListener('click', fetchTHIData); */
+
+   // Check if all IDs used in Flowbite are present in the DOM
+</script>
+{% endblock content %}

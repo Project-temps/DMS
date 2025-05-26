@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+<base href="/">
+{% load static %}
+
+{% block content %}
+<section id="inner-headline">
+   <div class="container">
+      <div class="row">
+         <div class="col-lg-12">
+            <h2 class="pageTitle">Communication</h2>
+         </div>
+      </div>
+   </div>
+</section>
+<section id="content">
+   <div class="container">
+      <h3>Contact Information:</h3>
+      <div class="row">
+         <div class="col-md-4">
+            <div class="box-gray">
+               <h4 style="font-weight: bold; font-size: 1.5em;">Germany</h4> <!-- Made bold and increased size -->
+               <img src="{% static 'img/People/David.png' %}" alt="Dr.-Ing. David Janke" style="height: 200px; object-fit: cover;" />
+               <p style="font-weight: bold;">Dr.-Ing. David Janke</p>
+               <p>Leibniz Institute of Agricultural Engineering and Bio-economy e.V. (ATB)</p>
+               <p>Telefon: +49 331 5699-513</p>
+               <p>E-Mail: <a href="mailto:DJanke@atb-potsdam.de">DJanke@atb-potsdam.de</a></p>
+            </div>
+         </div>
+         <div class="col-md-4">
+            <div class="box-gray">
+               <h4 style="font-weight: bold; font-size: 1.5em;">Poland</h4> <!-- Made bold and increased size -->
+               <img src="{% static 'img/People/Sebastian.jpg' %}" alt="Dr Sebastian Opaliński" style="height: 200px; object-fit: cover;" />
+               <p style="font-weight: bold;">Dr Sebastian Opaliński</p>
+               <p>Warsaw University of Environmental and Life Sciences</p>
+               <p>Email: <a href="mailto:sebastian.opalinski@upwr.edu.pl">sebastian.opalinski@upwr.edu.pl</a></p>
+            </div>
+         </div>
+         <div class="col-md-4">
+            <div class="box-gray">
+               <h4 style="font-weight: bold; font-size: 1.5em;">Estonia</h4> <!-- Made bold and increased size -->
+               <img src="{% static 'img/People/Eugen.jpg' %}" alt="Prof Eugen Kokin" style="height: 200px; object-fit: cover;" />
+               <p style="font-weight: bold;">Prof Eugen Kokin</p> <!-- Made bold -->               
+               <p>Estonian University of Life Sciences</p>
+               <p>Telefon: +372 5530453</p>
+               <p>Email: <a href="mailto:eugen.kokin@emu.ee">eugen.kokin@emu.ee</a></p>
+            </div>
+         </div>
+         <!-- Add more boxes as needed -->
+      </div>
+   </div>
+</section>
+{% endblock %}

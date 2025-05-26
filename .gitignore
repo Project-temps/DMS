@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+*.sqlite3
+*.db
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+.npm
+
+# Django
+/static/
+/media/
+/staticfiles/
+.env
+*.log
+*.pot
+*.pyc
+db.sqlite3
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Environment files #
+.env
+
+# IDE specific files #
+.vscode/
+*.sublime-project
+*.sublime-workspace

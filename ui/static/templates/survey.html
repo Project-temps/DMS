@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+<base href="/">
+{% load static %}
+
+{% block content %}
+<section id="inner-headline">
+   <div class="container">
+      <div class="row">
+         <div class="col-lg-12">
+            <h2 class="pageTitle">Survey</h2>
+         </div>
+      </div>
+   </div>
+</section>
+<section id="content">
+   <div class="container text-center">
+      <h3>Please select your preferred language for the survey:</h3>
+      <div class="row center-buttons">
+         <div class="col-md-3">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQWOmtjtz3n6FDsdXdw6LWKNDCzWephJP0rD5yn0F-sYR9xw/viewform" class="button-1">English</a>
+         </div>
+         <div class="col-md-3">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdfuR2wYPIxYoRNWL1sUSETn5ly9gkwMKhqjJajg-uTnL63Zw/viewform" class="button-1">German</a>
+         </div>
+      </div>
+   </div>
+</section>
+{% endblock %}
