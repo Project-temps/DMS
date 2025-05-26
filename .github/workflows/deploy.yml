@@ -17,6 +17,15 @@ jobs:
           npm install
           npm run build
 
+      - name: Test SSH connection
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASS }}
+          script: |
+            echo "SSH connection is successful"
+
       - name: Upload to VPS
         uses: appleboy/scp-action@master
         with:
