@@ -32,7 +32,7 @@ jobs:
     
     - name: Deploy using SSH
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} '
+        ssh -vvv -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} '
           cd C:\Users\a_shi\source\2025repo\DMS
           git pull origin main
           C:\REPO\dms2\DMS\venv\Scripts\python.exe -m pip install --upgrade pip
