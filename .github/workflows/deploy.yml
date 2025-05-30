@@ -2,43 +2,68 @@ name: Deploy to Windows VPS
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
-  deploy:
-    runs-on: windows-latest
-    
+  test:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    
-    - name: Run tests
-      run: |
-        python manage.py test
-    
-    - name: Deploy to Windows VPS
-      uses: webfactory/ssh-agent@v0.8.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-    
-    - name: Deploy using SSH
-      run: |
-        ssh -vvv -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} '
-          cd C:\Users\REPO\dms2\DMS
-          git pull origin main
-          C:\REPO\dms2\DMS\venv\Scripts\python.exe -m pip install --upgrade pip
-          C:\REPO\dms2\DMS\venv\Scripts\pip.exe install -r requirements.txt
-          C:\REPO\dms2\DMS\venv\Scripts\python.exe manage.py migrate
-          C:\REPO\dms2\DMS\venv\Scripts\python.exe manage.py collectstatic --noinput
-          net stop dms2
-          net start dms2
-        '
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run unit tests
+        run: python manage.py test
+
+  deploy:
+    needs: test          
+    runs-on: ubuntu-latest
+    env:
+      VPS_HOST:  ${{ secrets.VPS_HOST }}
+      VPS_PORT:  ${{ secrets.VPS_PORT || '22' }}
+      VPS_USER:  ${{ secrets.VPS_USER }}
+    steps:
+      - uses: actions/checkout@v3   # optional – not strictly needed for deploy
+
+   
+      - name: Add private key to agent
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add github.com-dms host alias
+        run: |
+          printf '%s\n' \
+            'Host github.com-dms' \
+            '  HostName github.com' \
+            '  User git' \
+            '  IdentityFile ~/.ssh/id_ed25519' >> ~/.ssh/config
+
+   
+      - name: Pre-seed known_hosts for the VPS
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "$VPS_PORT" "$VPS_HOST" >> ~/.ssh/known_hosts
+
+
+      - name: Deploy to Windows VPS
+        run: |
+          ssh -o IdentitiesOnly=yes \
+              -p "$VPS_PORT" \
+              "$VPS_USER@$VPS_HOST" powershell -Command "
+                cd 'C:\REPO\dms2\DMS';
+                git pull github.com-dms main;
+                C:\REPO\dms2\DMS\venv\Scripts\python.exe -m pip install --upgrade pip;
+                C:\REPO\dms2\DMS\venv\Scripts\pip.exe install -r requirements.txt;
+                C:\REPO\dms2\DMS\venv\Scripts\python.exe manage.py migrate;
+                C:\REPO\dms2\DMS\venv\Scripts\python.exe manage.py collectstatic --noinput;
+                net stop dms2;
+                net start dms2;
+              "
