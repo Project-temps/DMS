@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     
     steps:
     - uses: actions/checkout@v3
@@ -32,8 +32,8 @@ jobs:
     
     - name: Deploy using SSH
       run: |
-        ssh -vvv -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} '
-          cd C:\Users\a_shi\source\2025repo\DMS
+        ssh -vvv -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} '
+          cd C:\Users\REPO\dms2\DMS
           git pull origin main
           C:\REPO\dms2\DMS\venv\Scripts\python.exe -m pip install --upgrade pip
           C:\REPO\dms2\DMS\venv\Scripts\pip.exe install -r requirements.txt
