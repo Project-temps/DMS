@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VPS_HOST:  ${{ secrets.VPS_HOST }}
-      VPS_PORT:  ${{ secrets.VPS_PORT || '22' }}
+      VPS_PORT:  ${{ secrets.VPS_PORT }}
       VPS_USER:  ${{ secrets.VPS_USER }}
     steps:
       - uses: actions/checkout@v3   # optional – not strictly needed for deploy
@@ -57,7 +57,7 @@ jobs:
 
       - name: Deploy to Windows VPS
         run: |
-          ssh vps powershell -Command "
+          ssh vps "
             cd 'C:\REPO\dms2\DMS';
             git pull github.com-dms main;
             C:\REPO\dms2\DMS\venv\Scripts\python.exe -m pip install --upgrade pip;
