@@ -58,7 +58,7 @@ jobs:
 
     - name: Fetch & reset working copy on VPS
       run: |
-        ssh vps powershell -NoProfile -Command "
+        ssh vps "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfile -Command "
           cd 'C:\REPO\dms2\DMS'
           git fetch origin main -q
           if (-not \$?) { Write-Error 'git fetch failed'; exit 1 }
@@ -66,6 +66,7 @@ jobs:
           if (-not \$?) { Write-Error 'git reset failed'; exit 1 }
           Write-Host 'Checked-out commit:'; git rev-parse --short HEAD
         "
+
 
 # -------------------------------------------------- #
 # 3.  Install deps, migrate, collectstatic, restart  #
@@ -101,7 +102,7 @@ jobs:
 
     - name: Provision & restart service
       run: |
-        ssh vps powershell -NoProfile -Command "
+        ssh vps "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfile -Command "
           cd 'C:\REPO\dms2\DMS'
           .\venv\Scripts\python.exe -m pip install --upgrade pip -q
           .\venv\Scripts\pip.exe    install -r requirements.txt -q
