@@ -100,14 +100,27 @@ jobs:
           '  User git' \
           '  IdentityFile ~/.ssh/id_ed25519' >> ~/.ssh/config
 
+
     - name: Provision & restart service
       run: |
         ssh vps "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfile -Command "
           cd 'C:\REPO\dms2\DMS'
+
+          # install / migrate (unchanged) ─────────────────────────
           .\venv\Scripts\python.exe -m pip install --upgrade pip -q
           .\venv\Scripts\pip.exe    install -r requirements.txt -q
           .\venv\Scripts\python.exe manage.py migrate --noinput
+
+          # collectstatic with hard-fail ──────────────────────────
+          \$ErrorActionPreference = 'Stop'       # ← ① stop on cmdlet errors
           .\venv\Scripts\python.exe manage.py collectstatic --noinput
-          net stop dms2
+          if (\$LASTEXITCODE) {                  # ← ② stop if Django exits ≠ 0
+            Write-Error 'collectstatic failed'
+            exit \$LASTEXITCODE
+          }
+
+          # restart only if everything above succeeded
+          net stop  dms2
           net start dms2
         "
+
