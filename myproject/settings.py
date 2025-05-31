@@ -23,11 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!((p4wtko(60pzy^d*pz4r*c12kay*pry$n9s29eu4-w5penre'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-insecure-dev-key')
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1','dmsplatform.pro', 'www.dmsplatform.pro', '185.215.244.171']
 
