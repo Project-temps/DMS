@@ -34,9 +34,11 @@ jobs:
 
    
       - name: Add private key to agent
-        uses: webfactory/ssh-agent@v0.8.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+            chmod 600 ~/.ssh/id_ed25519
+            echo -e "Host vps\n  HostName ${{ secrets.VPS_HOST }}\n  Port ${{ secrets.VPS_PORT }}\n  User ${{ secrets.VPS_USER }}\n  IdentityFile ~/.ssh/id_ed25519\n  IdentitiesOnly yes\n  StrictHostKeyChecking no" > ~/.ssh/config
 
       - name: Add github.com-dms host alias
         run: |
@@ -55,15 +57,13 @@ jobs:
 
       - name: Deploy to Windows VPS
         run: |
-          ssh -o IdentitiesOnly=yes \
-              -p "$VPS_PORT" \
-              "$VPS_USER@$VPS_HOST" powershell -Command "
-                cd 'C:\REPO\dms2\DMS';
-                git pull github.com-dms main;
-                C:\REPO\dms2\DMS\venv\Scripts\python.exe -m pip install --upgrade pip;
-                C:\REPO\dms2\DMS\venv\Scripts\pip.exe install -r requirements.txt;
-                C:\REPO\dms2\DMS\venv\Scripts\python.exe manage.py migrate;
-                C:\REPO\dms2\DMS\venv\Scripts\python.exe manage.py collectstatic --noinput;
-                net stop dms2;
-                net start dms2;
-              "
+          ssh vps powershell -Command "
+            cd 'C:\REPO\dms2\DMS';
+            git pull github.com-dms main;
+            C:\REPO\dms2\DMS\venv\Scripts\python.exe -m pip install --upgrade pip;
+            C:\REPO\dms2\DMS\venv\Scripts\pip.exe install -r requirements.txt;
+            C:\REPO\dms2\DMS\venv\Scripts\python.exe manage.py migrate;
+            C:\REPO\dms2\DMS\venv\Scripts\python.exe manage.py collectstatic --noinput;
+            net stop dms2;
+            net start dms2;
+          "
