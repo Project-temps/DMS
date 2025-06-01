@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard • ET4D{% endblock %}
+
+{% block content %}
+<div class="container-fluid flex-grow-1 container-p-y">
+
+  <h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">ET4D /</span> Dashboard
+  </h4>
+
+  {# ---------- اگر لاگین نیست ---------- #}
+  {% if not show_tabs %}
+    <div class="row mb-5">
+      <div class="col-12 col-lg-8">
+        <p class="lead">
+          The Environmental Traits for Dairy (ET4D) dashboard aggregates real-time sensor
+          readings, THI calculations and machine-learning forecasts to help you keep herds
+          healthy and barns efficient.
+        </p>
+        <div class="alert alert-primary d-flex align-items-center" role="alert">
+          <i class="bx bx-lock-open me-2 fs-4"></i>
+          <div>
+            <strong>Need deeper insights?</strong><br>
+            Create an account or log in to unlock personalised dashboards, modeling tools &amp; data export.
+          </div>
+        </div>
+
+        <a href="{% url 'register' %}" class="btn btn-success me-2">Create account</a>
+        <a href="{% url 'login' %}"    class="btn btn-outline-primary">Log in</a>
+      </div>
+
+      <div class="col-12 col-lg-4 text-center">
+        <img src="{% static 'sneat/assets/img/illustrations/man-with-laptop-light.png' %}"
+             class="img-fluid" style="max-height:250px;" alt="Dashboard illustration">
+      </div>
+    </div>
+  {% endif %}
+
+  {# ---------- اگر لاگین است تب‌ها را نشان بده ---------- #}
+  {% if show_tabs %}
+    <!-- Tabs -->
+    <ul class="nav nav-pills mb-4" id="dashTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="mon-tab" data-bs-toggle="tab"
+                data-bs-target="#monitoring" type="button" role="tab">
+          Monitoring
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="cmp-tab" data-bs-toggle="tab"
+                data-bs-target="#comparison" type="button" role="tab">
+          Comparison
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="mdl-tab" data-bs-toggle="tab"
+                data-bs-target="#modeling" type="button" role="tab">
+          Modeling
+        </button>
+      </li>
+    </ul>
+
+    <!-- Tab contents -->
+    <div class="tab-content" id="dashTabsContent">
+
+      <!-- Monitoring -->
+      <div class="tab-pane fade show active" id="monitoring" role="tabpanel" aria-labelledby="mon-tab">
+        <div class="alert alert-info">
+          <i class="bx bx-loader bx-spin align-middle"></i>
+          Live monitoring charts coming soon…
+        </div>
+      </div>
+
+      <!-- Comparison -->
+      <div class="tab-pane fade" id="comparison" role="tabpanel" aria-labelledby="cmp-tab">
+        <div class="alert alert-warning">
+          Comparison interface under construction.
+        </div>
+      </div>
+
+      <!-- Modeling -->
+      <div class="tab-pane fade" id="modeling" role="tabpanel" aria-labelledby="mdl-tab">
+        <div class="alert alert-success">
+          Machine-learning tools will appear here shortly.
+        </div>
+      </div>
+
+    </div><!-- /tab-content -->
+  {% endif %}
+
+</div><!-- /container -->
+{% endblock %}

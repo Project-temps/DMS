@@ -48,7 +48,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'compressor',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,7 +76,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'ui/static/templates'],  # Adjusted to match your directory structure
+        'DIRS': [BASE_DIR / 'ui/templates'],  # Adjusted to match your directory structure
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -155,3 +161,8 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 ]
+
+
+
+
+TEMPLATES[0]["DIRS"] += [ BASE_DIR / "ui" / "templates" / "sneat_html" ]

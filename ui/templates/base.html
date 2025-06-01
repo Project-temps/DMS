@@ -1,0 +1,52 @@
+{# ui/templates/base.html #}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}ET4D{% endblock %}</title>
+
+    {# لینک آیکن فاوآیکون #}
+    <link rel="icon" type="image/x-icon" href="{% static 'sneat/assets/img/favicon/favicon.ico' %}">
+
+    {# CSSهای اصلی Sneat #}
+    <link rel="stylesheet" href="{% static 'sneat/assets/vendor/css/core.css' %}">
+    <link rel="stylesheet" href="{% static 'sneat/assets/vendor/css/theme-default.css' %}">
+    <link rel="stylesheet" href="{% static 'sneat/assets/css/demo.css' %}">
+    {% block extra_css %}{% endblock %}
+
+    {# اسکریپت‌های پیکربندی Sneat #}
+    <script src="{% static 'sneat/assets/vendor/js/helpers.js' %}"></script>
+    <script src="{% static 'sneat/assets/js/config.js' %}"></script>
+  </head>
+  <body>
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        {# 1) سایدبار #}
+        {% include "partials/sidebar.html" %}
+
+        {# 2) صفحه اصلی (نوار بالا + محتوا) #}
+        <div class="layout-page">
+          {% include "partials/navbar.html" %}
+
+          <div class="content-wrapper">
+            {% block content %}{% endblock %}
+            {% include "partials/footer.html" %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {# اسکریپت‌های انتهای body (JSهای Sneat) #}
+    <script src="{% static 'sneat/assets/vendor/libs/jquery/jquery.js' %}"></script>
+    <script src="{% static 'sneat/assets/vendor/libs/popper/popper.js' %}"></script>
+    <script src="{% static 'sneat/assets/vendor/js/bootstrap.js' %}"></script>
+    <script src="{% static 'sneat/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+    <script src="{% static 'sneat/assets/vendor/js/menu.js' %}"></script>
+    <script src="{% static 'sneat/assets/vendor/libs/apex-charts/apexcharts.js' %}"></script>
+    <script src="{% static 'sneat/assets/js/main.js' %}"></script>
+    <script src="{% static 'sneat/assets/js/dashboards-analytics.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>
