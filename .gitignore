@@ -1,3 +1,5 @@
+env/
+venv/
 # Python
 __pycache__/
 *.py[cod]
@@ -9,8 +11,7 @@ ENV/
 env/
 env.bak/
 venv.bak/
-*.sqlite3
-*.db
+
 
 # Node
 node_modules/
@@ -43,3 +44,4 @@ db.sqlite3
 .vscode/
 *.sublime-project
 *.sublime-workspace
+.venv/
