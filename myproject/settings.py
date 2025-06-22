@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'ui',
     'authentication',
     'django_plotly_dash',
+    'dpd_static_support',
     'rest_framework',
     'api',
     'compressor',
