@@ -50,8 +50,8 @@ def process_dataframes(days=90):
         logger.debug("Starting process_dataframes with days: %s", days)
         
         # Load data
-        df1 = pd.read_csv('data/processed/germany/hourly_merged_sensor_data.csv')
-        df2 = pd.read_csv('data/processed/poland/hourly_merged_sensor_data.csv')
+        df1 = pd.read_csv('data/processed/Germany/hourly_merged_sensor_data.csv')
+        df2 = pd.read_csv('data/processed/Poland/hourly_merged_sensor_data.csv')
         logger.debug("Loaded dataframes: df1 shape %s, df2 shape %s", df1.shape, df2.shape)
 
         # Convert datetime column to pandas datetime
