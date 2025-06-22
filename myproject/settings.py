@@ -154,18 +154,5 @@ COMPRESS_ENABLED = True
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'django_plotly_dash.finders.DashAssetFinder',
-    'django_plotly_dash.finders.DashComponentFinder',
-    'django_plotly_dash.finders.DashAppDirectoryFinder',
     'compressor.finders.CompressorFinder',
-]
-
-# Packages that supply Dash component bundles
-PLOTLY_COMPONENTS = [
-    'dash_core_components',
-    'dash_html_components',
-    'dash_renderer',
-    'dpd_components',
-    'dpd_static_support',
-    'dash_bootstrap_components',
 ]
