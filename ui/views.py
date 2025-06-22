@@ -32,7 +32,6 @@ def get_thi_data(request):
 
 # Views for static pages
 def index(request):
-    return render(request, 'index.html')
     return render(request, 'home.html')
 
 def about(request):
