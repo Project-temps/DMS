@@ -1,25 +1,7 @@
-from django.shortcuts import render
 from django.http import JsonResponse
-from rest_framework.response import Response
 from rest_framework.views import APIView
-from data_processing.prediction import make_prediction  
 from data_management.calculate_thi import calculate_thi
-import json  # Add this import at the top of your file
-
-class PredictionAPIView(APIView):
-    def post(self, request):
-        data = request.data
-        result = make_prediction(data)
-        return Response({"prediction": result})
-# from data_processing.prediction import make_prediction  
-from data_management.calculate_thi import calculate_thi
-import json  # Add this import at the top of your file
-
-# class PredictionAPIView(APIView):
-#     def post(self, request):
-#         data = request.data
-#         result = make_prediction(data)
-#         return Response({"prediction": result})
+import json
 
 class CalculateTHIAPIView(APIView):
     def get(self, request):
