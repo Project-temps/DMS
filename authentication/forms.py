@@ -30,14 +30,14 @@ class RegisterForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
-            # ساخت پروفایل و اختصاص گروه
+            # Create a profile and assign the group
             Profile.objects.create(
                 user=user,
                 group=self.cleaned_data["group"],
                 country=self.cleaned_data.get("country", ""),
                 farm_address=self.cleaned_data.get("farm_address", "")
             )
-            # افزودن کاربر به گروه auth
+            # Add the user to the Django group
             from django.contrib.auth.models import Group
             django_group, _ = Group.objects.get_or_create(name=self.cleaned_data["group"].capitalize())
             user.groups.add(django_group)
@@ -45,10 +45,8 @@ class RegisterForm(forms.ModelForm):
 
 
 class ProfileEditForm(forms.ModelForm):
-    """
-    این فرم برای ویرایش اطلاعات پروفایل کاربر (مثلاً country یا farm_address) است.
-    اگر به فرم ویرایش نیاز ندارید، همین کلاس را می‌توانید حذف کنید یا خالی نگه دارید.
-    """
+    """Form to edit profile data such as country or farm address.
+    Remove this class or leave it empty if not required."""
     class Meta:
         model = Profile
         fields = ["group", "country", "farm_address"]

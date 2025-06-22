@@ -12,16 +12,16 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-    # ورود و خروج
+    # Login and logout
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
 
-    # ثبت نام
+    # Registration
     path("register/", views.register_view, name="register"),
 
     path("profile/", views.profile_edit_view, name="profile_edit"),
 
-    # # فراموشی رمز
+    # Password reset
     # path("password_reset/", auth_views.PasswordResetView.as_view(
     #     template_name="password_reset.html"
     # ), name="password_reset"),

@@ -7,5 +7,5 @@ class AuthenticationConfig(AppConfig):
     name = 'authentication'
 
     def ready(self):
-        # لازم است سیگنال‌ها بارگذاری شوند
-        import authentication.models  # این خط برای فراخوانی سیگنال‌ها کافی‌ست
+        # Load signal handlers
+        import authentication.models  # Importing triggers registration

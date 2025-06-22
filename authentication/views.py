@@ -61,22 +61,22 @@ def register_view(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
-            # خودِ فرم در save() کار ساخت کاربر + پروفایل + گروه را انجام می‌دهد
+            # Form.save() creates the user, profile and group
             user = form.save(commit=False)
             password = form.cleaned_data.get("password1")
             user.set_password(password)
 
-            # مصرف‌کننده (Consumer) بدون تأیید ادمین فعال شود
+            # Consumers are activated without admin approval
             group_name = form.cleaned_data.get("group")
             if group_name == "consumer":
                 user.is_active = True
             else:
-                # farmer و stakeholder باید توسط ادمین تأیید شوند
+                # Farmers and stakeholders require admin approval
                 user.is_active = False
 
             user.save()
 
-            # اکنون فرم Profile را هم ذخیره کنیم
+            # Save the Profile as well
             profile = Profile.objects.create(
                 user=user,
                 first_name=form.cleaned_data.get("first_name"),
@@ -86,11 +86,11 @@ def register_view(request):
                 farm_address=form.cleaned_data.get("farm_address") or ""
             )
 
-            # اختصاص گروه در سطح دجانگو
+            # Assign the Django group
             group_obj, _ = Group.objects.get_or_create(name=group_name.capitalize())
             user.groups.add(group_obj)
 
-            # پیام مناسب به کاربر نشان داده شود
+            # Display a suitable message to the user
             if group_name == "consumer":
                 messages.success(request, "ثبت نام شما با موفقیت انجام شد. اکنون می‌توانید وارد شوید.")
             else:

@@ -22,11 +22,11 @@
               <h4 class="mb-2">Create an account</h4>
               <p class="mb-4">Fill the form below and choose your role.</p>
 
-              <!-- =======  فرم ثبت‌نام  ======= -->
+              <!-- =======  Sign-up Form  ======= -->
               <form action="{% url 'register' %}" method="post">
                 {% csrf_token %}
 
-                <!-- نام کاربری -->
+                <!-- Username -->
                 <div class="mb-3">
                   <label class="form-label" for="signup-username">Username</label>
                   <input
@@ -39,7 +39,7 @@
                   />
                 </div>
 
-                <!-- ایمیل -->
+                <!-- Email -->
                 <div class="mb-3">
                   <label class="form-label" for="signup-email">Email</label>
                   <input
@@ -52,7 +52,7 @@
                   />
                 </div>
 
-                <!-- رمز -->
+                <!-- Password -->
                 <div class="mb-3 form-password-toggle">
                   <label class="form-label" for="signup-password">Password</label>
                   <div class="input-group input-group-merge">
@@ -68,7 +68,7 @@
                   </div>
                 </div>
 
-                <!-- انتخاب گروه کاربر -->
+                <!-- Select user role -->
                 <div class="mb-4">
                   <label class="form-label" for="signup-group">Role</label>
                   <select id="signup-group" name="group" class="form-select" required>
@@ -79,17 +79,17 @@
                   </select>
                 </div>
 
-                <!-- پیام‌های Django -->
+                <!-- Django messages -->
                 {% if messages %}
                   {% for m in messages %}
                     <div class="alert alert-info p-2">{{ m }}</div>
                   {% endfor %}
                 {% endif %}
 
-                <!-- دکمه -->
+                <!-- Button -->
                 <button class="btn btn-primary d-grid w-100">Register</button>
               </form>
-              <!-- ======= /فرم ======= -->
+              <!-- ======= /Form ======= -->
 
               <p class="text-center mt-3">
                 Already have an account?

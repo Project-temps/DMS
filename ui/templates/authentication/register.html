@@ -12,7 +12,7 @@
     <div class="col-md-6">
       <h2 class="mb-4 text-center">Create an account</h2>
 
-      {# نمایش پیغام‌های موفقیت/خطا #}
+      {# Display success/error messages #}
       {% if messages %}
         {% for message in messages %}
           <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
@@ -25,7 +25,7 @@
         {% csrf_token %}
         {{ form.non_field_errors }}
 
-        {# هیچ `<label>` دستی ننویسید؛ crispy خودش label و input را تولید می‌کند #}
+        {# Let crispy forms render labels and inputs #}
         <div class="mb-3">
           {{ form.username|as_crispy_field }}
         </div>

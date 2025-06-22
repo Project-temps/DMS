@@ -2,7 +2,7 @@
 {% load static %}
 
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-  {# ---------- لوگو و نام اپلیکیشن ---------- #}
+  {# ---------- App logo and name ---------- #}
   <div class="app-brand demo">
     <a href="{% url 'index' %}" class="app-brand-link">
       <span class="app-brand-logo demo">
@@ -21,7 +21,7 @@
 
   <ul class="menu-inner py-1">
 
-    {# ---------- منوی اصلی ---------- #}
+    {# ---------- Main menu ---------- #}
     <li class="menu-item{% if request.resolver_match.url_name == 'index' %} active{% endif %}">
       <a href="{% url 'index' %}" class="menu-link">
         <i class="menu-icon tf-icons bx bx-home"></i>
@@ -58,7 +58,7 @@
     </li>
 
 
-    {# ---------- جداکننده (Divider) و بخش مهمان (Guest) ---------- #}
+    {# ---------- Divider and guest section ---------- #}
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text">Guest</span>
     </li>
