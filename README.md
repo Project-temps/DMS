@@ -16,8 +16,3 @@ A Django and Dash project providing an interactive data management interface.
    ```bash
    python manage.py runserver
    ```
-   
-Before running any Django commands, set a secret key in the environment:
-```bash
-export DJANGO_SECRET_KEY='your-strong-secret-key'
-```
