@@ -70,14 +70,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-<<<<<<< HEAD
         'DIRS': [BASE_DIR / 'ui/static/templates'],  # Adjusted to match your directory structure
-=======
-        'DIRS': [
-            BASE_DIR / 'ui/templates',
-            BASE_DIR / 'ui/static/templates',
-        ],
->>>>>>> origin/New_ui
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
