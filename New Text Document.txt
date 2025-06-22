@@ -1,0 +1,66 @@
+
+
+python manage.py collectstatic --noinput   
+1. **Reduce Dependencies**
+   - Create a smaller requirements.txt with only production dependencies
+   - Remove development-only packages
+   - Consider using `pip-compile` to create a locked requirements file
+
+2. **Service Setup with NSSM**
+   - Use NSSM to run Gunicorn or Daphne as a Windows service:
+     ```
+     nssm install ET4D_DMS "C:\path\to\venv\Scripts\gunicorn.exe" "myproject.wsgi:application --bind 127.0.0.1:8001"
+     ```
+
+3. **Nginx Configuration**
+   - Add a new server block to your existing nginx.conf:
+     ```nginx
+     server {
+         listen 80;
+         server_name your-domain.com;
+         
+         location /static/ {
+             alias C:/path/to/DMS/staticfiles/;
+         }
+         
+         location / {
+             proxy_pass http://127.0.0.1:8001;
+             proxy_set_header Host $host;
+             proxy_set_header X-Real-IP $remote_addr;
+         }
+     }
+     ```
+
+4. **Cloudflare SSL Setup**
+   - Add your domain to Cloudflare
+   - Set SSL mode to "Flexible" in Cloudflare dashboard
+   - Create a page rule for your domain to always use HTTPS
+
+5. **Additional Tips**
+   - Run `python manage.py collectstatic` before deployment
+   - Set `DEBUG = False` in your production settings
+   - Use environment variables for sensitive data
+   - Configure whitenoise for static files
+
+This approach lets you leverage your existing Nginx setup while adding your new Django application alongside your other sites. The Cloudflare Flexible SSL will handle encryption between users and Cloudflare, without requiring changes to your Windows server configuration.
+
+```plaintext
+     nssm install ET4D_DMS "C:\path\to\venv\Scripts\gunicorn.exe" "myproject.wsgi:application --bind 127.0.0.1:8001"
+```
+
+```plaintext
+     server {
+         listen 80;
+         server_name your-domain.com;
+         
+         location /static/ {
+             alias C:/path/to/DMS/staticfiles/;
+         }
+         
+         location / {
+             proxy_pass http://127.0.0.1:8001;
+             proxy_set_header Host $host;
+             proxy_set_header X-Real-IP $remote_addr;
+         }
+     }
+```
