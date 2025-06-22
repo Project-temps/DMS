@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 import pandas as pd
 import json
+<<<<<<< HEAD
 import pandas as pd
 
 import logging
@@ -15,6 +16,12 @@ import pandas as pd
 import pytz
 import logging
 
+=======
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.WARNING)
+>>>>>>> origin/New_ui
 logger = logging.getLogger(__name__)
 
 from data_management.calculate_thi import calculate_thi  # Import the function
@@ -26,7 +33,11 @@ def get_thi_data(request):
 
 # Views for static pages
 def index(request):
+<<<<<<< HEAD
     return render(request, 'index.html')
+=======
+    return render(request, 'home.html')
+>>>>>>> origin/New_ui
 
 def about(request):
     return render(request, 'about.html')

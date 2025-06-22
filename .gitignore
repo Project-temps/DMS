@@ -11,7 +11,12 @@ ENV/
 env/
 env.bak/
 venv.bak/
+<<<<<<< HEAD
 
+=======
+*.sqlite3
+*.db
+>>>>>>> origin/New_ui
 
 # Node
 node_modules/
