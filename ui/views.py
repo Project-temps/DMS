@@ -1,25 +1,12 @@
 """Views for handling UI interactions and data display."""
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.http import JsonResponse
-import pandas as pd
 import json
-import pandas as pd
-
 import logging
+
 import pandas as pd
 from django.http import JsonResponse
+from django.shortcuts import render
 
-# Configure logging
-logging.basicConfig(level=logging.WARNING)
-import pandas as pd
-import pytz
-import logging
-
-import logging
-
-# Configure logging
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 

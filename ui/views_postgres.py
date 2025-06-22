@@ -1,24 +1,14 @@
 """Views for interacting with PostgreSQL-backed data."""
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
+from django.shortcuts import render
 from django.http import JsonResponse
 import pandas as pd
 import json
-import pandas as pd
-
 import logging
-import pandas as pd
-from django.http import JsonResponse
 from django.db import connections
-# Configure logging
-logging.basicConfig(level=logging.WARNING)
-import pandas as pd
-import pytz
-import logging
-from django.utils import timezone
 from django.core.cache import cache
 
+logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 from data_management.calculate_thi import calculate_thi  # Import the function
