@@ -8,16 +8,29 @@ import os
 from data_management.data_loader import load_data 
 
 current_directory = os.path.dirname(os.path.abspath(__file__))
-model = load_model(os.path.join(current_directory, 'model.h5'))
-scaler = joblib.load(os.path.join(current_directory, "scaler.pkl"))
-target_scaler = joblib.load(os.path.join(current_directory, "target_scaler.pkl"))
+
+# Cache objects so that heavy assets are only loaded when a prediction is made
+model = None
+scaler = None
+target_scaler = None
+
+
+def _load_assets():
+    """Load the ML model and scalers if they haven't been loaded yet."""
+    global model, scaler, target_scaler
+    if model is None:
+        model = load_model(os.path.join(current_directory, "model.h5"))
+    if scaler is None:
+        scaler = joblib.load(os.path.join(current_directory, "scaler.pkl"))
+    if target_scaler is None:
+        target_scaler = joblib.load(
+            os.path.join(current_directory, "target_scaler.pkl")
+        )
     
-def make_prediction(n_past=7*24, n_future=12):
-    data = load_data() 
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-    model = load_model(os.path.join(current_directory, 'model.h5'))
-    scaler = joblib.load(os.path.join(current_directory, "scaler.pkl"))
-    target_scaler = joblib.load(os.path.join(current_directory, "target_scaler.pkl"))
+def make_prediction(n_past=7 * 24, n_future=12):
+    """Run the prediction model on loaded sensor data."""
+    _load_assets()
+    data = load_data()
     
     # data_path = os.path.join(current_directory, 'train_cleaned_dataset_modified.csv')
     # data = pd.read_csv(data_path)
