@@ -18,7 +18,7 @@
     <script src="{% static 'sneat/assets/js/config.js' %}"></script>
 
     {# inject the Dash CSS/JS bundles #}
-    {% plotly_header %}  <!-- loads all the JS/CSS your Dash apps need :contentReference[oaicite:0]{index=0} -->
+    {% plotly_header %}  <!-- loads all the JS/CSS your Dash apps need -->
   </head>
 
   <body>
@@ -41,6 +41,6 @@
     {% block extra_js %}{% endblock %}
 
     {# inject the Dash runtime & message-pipe if needed #}
-    {% plotly_footer %}  <!-- this must go just before </body> :contentReference[oaicite:1]{index=1} -->
+    {% plotly_footer %}  <!-- this must go just before </body> -->
   </body>
 </html>
