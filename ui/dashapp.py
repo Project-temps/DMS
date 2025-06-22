@@ -9,9 +9,9 @@ from django_plotly_dash import DjangoDash
 from data_management.data_loader import load_data
 
 
-# Load data
+# Load hourly aggregated data
 try:
-    df = load_data()
+    df = load_data('hourly_merged_sensor_data.csv')
 except FileNotFoundError as e:
     print(e)
     
@@ -30,11 +30,12 @@ app = DjangoDash('dashapp')
 # df = pd.read_csv(data_path)
 
 feature_groups = {
-    'CO2': ['CO2_w-out', 'CO2_s-out', 'CO2_n-out', 'CO2_e-out', 'CO2_n-in', 'CO2_m-in', 'CO2_m-in-up', 'CO2_s-in', 'CO2_w-in', 'CO2_e-in'],
-    'NH3': ['NH3_w-out', 'NH3_s-out', 'NH3_n-out', 'NH3_e-out', 'NH3_n-in', 'NH3_m-in', 'NH3_m-in-up', 'NH3_s-in', 'NH3_w-in', 'NH3_e-in'],
-    'CH4': ['CH4_w-out', 'CH4_s-out', 'CH4_n-out', 'CH4_e-out', 'CH4_n-in', 'CH4_m-in', 'CH4_m-in-up', 'CH4_s-in', 'CH4_w-in', 'CH4_e-in', 'CH4_in_mean', 'CH4_out_mean'],
-    'Temperature': ['TEMP'],
-    'Wind': ['Wind_dir', 'Wind_speed', 'Ver_w', 'Hor_w']
+    'CH4': ['ch4'],
+    'CO2': ['co2'],
+    'NH3': ['nh3'],
+    'Temperature': ['temperature'],
+    'Humidity': ['humidity'],
+    'Wind': ['wind_ns', 'wind_ew']
 }
 
 
@@ -77,7 +78,7 @@ def set_features_value(available_options):
 def update_graph(selected_tab, selected_features):
     if not selected_features:
         return dash.no_update
-    fig = px.line(df, x='Date', y=selected_features, title=f'Time Series for Selected Features')
+    fig = px.line(df, x='datetime', y=selected_features, title=f'Time Series for Selected Features')
     return fig
 
 
