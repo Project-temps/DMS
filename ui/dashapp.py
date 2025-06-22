@@ -1,3 +1,5 @@
+"""Dash app for visualizing environmental data inside Django."""
+
 import dash
 from dash import dcc, html, Input, Output
 import pandas as pd

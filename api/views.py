@@ -1,3 +1,5 @@
+"""API views that expose THI data calculations."""
+
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from data_management.calculate_thi import calculate_thi

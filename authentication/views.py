@@ -1,3 +1,5 @@
+"""Views handling user authentication requests."""
+
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.shortcuts import redirect
