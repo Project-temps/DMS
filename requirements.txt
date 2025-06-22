@@ -9,6 +9,7 @@ django-appconf==1.1.0
 django-compressor==4.5.1
 django-crispy-forms==2.4
 django-plotly-dash==2.4.6
+dpd-static-support
 djangorestframework==3.16.0
 joblib==1.5.1
 keras==3.10.0
