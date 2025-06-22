@@ -1,5 +1,4 @@
 from django.urls import path
-<<<<<<< HEAD
 from . import views
 
 urlpatterns = [
@@ -9,7 +8,6 @@ urlpatterns = [
 
 
 # admin pass:1234
-=======
 from django.contrib.auth import views as auth_views
 from . import views
 
@@ -42,4 +40,3 @@ urlpatterns = [
 #     path('login/', views.user_login, name='login'),
 #     path('logout/', views.user_logout, name='user_logout'),
 # ]
->>>>>>> origin/New_ui

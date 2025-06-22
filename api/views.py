@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
-<<<<<<< HEAD
 from data_processing.prediction import make_prediction  
 from data_management.calculate_thi import calculate_thi
 import json  # Add this import at the top of your file
@@ -12,7 +11,6 @@ class PredictionAPIView(APIView):
         data = request.data
         result = make_prediction(data)
         return Response({"prediction": result})
-=======
 # from data_processing.prediction import make_prediction  
 from data_management.calculate_thi import calculate_thi
 import json  # Add this import at the top of your file
@@ -22,7 +20,6 @@ import json  # Add this import at the top of your file
 #         data = request.data
 #         result = make_prediction(data)
 #         return Response({"prediction": result})
->>>>>>> origin/New_ui
 
 class CalculateTHIAPIView(APIView):
     def get(self, request):

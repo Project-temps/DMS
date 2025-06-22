@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -29,7 +28,6 @@ def user_logout(request):
         return JsonResponse({"success": True})
     else:
         return redirect('index')
-=======
 # authentication/views.py
 
 from django.shortcuts import render, redirect
@@ -119,4 +117,3 @@ def profile_edit_view(request):
         form = ProfileEditForm(instance=profile)
 
     return render(request, "authentication/profile_edit.html", {"form": form})
->>>>>>> origin/New_ui

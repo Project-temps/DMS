@@ -50,11 +50,8 @@ def make_prediction(n_past=7*24, n_future=12):
     #     'fig_html': fig_html,
     #     'selected_features': selected_features,
     # }
-<<<<<<< HEAD
 
-=======
  
->>>>>>> origin/New_ui
     # JsonResponse({'plot_html': context['plotly_figure']})
 
     return fig

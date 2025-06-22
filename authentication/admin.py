@@ -1,8 +1,6 @@
-<<<<<<< HEAD
 from django.contrib import admin
 
 # Register your models here.
-=======
 # authentication/admin.py
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -51,4 +49,3 @@ class UserAdmin(BaseUserAdmin):
 # ثبت تغییرات در پنل ادمین
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
->>>>>>> origin/New_ui

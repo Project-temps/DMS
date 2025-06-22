@@ -10,8 +10,5 @@ urlpatterns = [
     path('communication/', views.communication, name='communication'),
     path('api/getChartData', views.get_chart_data, name='get_chart_data'),
     path('api/get_thi_data/', views.get_thi_data, name='get_thi_data'),
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/New_ui
 ]
