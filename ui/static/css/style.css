@@ -1801,8 +1801,6 @@ padding:50px 0
 .dash-app iframe {
     width: 100%;
     height: auto;
-    /* Ensure the iframe is tall enough for its content */
-    min-height: 600px;
     border: none;
 }
 

@@ -38,5 +38,15 @@
       {% plotly_app name="dashapp" %}
     </div>
   </div>
+  <script>
+    const iframe = document.querySelector('.dash-app iframe');
+    if (iframe) {
+      iframe.setAttribute('scrolling', 'no');
+      iframe.style.overflow = 'hidden';
+      iframe.addEventListener('load', () => {
+        iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+      });
+    }
+  </script>
 {% endblock %}
 
