@@ -5,15 +5,23 @@ from dash import dcc, html, Input, Output
 import pandas as pd
 import plotly.express as px
 import os
+import logging
 from django_plotly_dash import DjangoDash
 from data_management.data_loader import load_data
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+logger.info("Initializing Dash app")
+
 
 # Load hourly aggregated data
+logger.info("Loading data for dashapp")
 try:
     df = load_data('hourly_merged_sensor_data.csv')
+    logger.info("Data loaded successfully with shape %s", df.shape)
 except FileNotFoundError as e:
-    print(e)
+    logger.exception("Data file could not be loaded: %s", e)
+    df = pd.DataFrame()
     
 # from flask_cors import CORS
 

@@ -128,9 +128,10 @@ def get_chart_data(request):
     return JsonResponse({'data': chart_data, 'statistics': statistics})
 
 def dashboard(request):
+    logger.info("Rendering dashboard view")
     days = int(request.GET.get('days', 90))  # Default to 90 days if not specified
     chart_data, parameters = process_dataframes(days)  # Call the new function to process dataframes
-    print(parameters)
+    logger.debug("Dashboard parameters: %s", parameters)
 
     chart_data_json = json.dumps(chart_data, ensure_ascii=False)
     return render(request, 'dashboard.html', {
