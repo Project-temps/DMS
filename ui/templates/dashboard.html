@@ -41,11 +41,14 @@
   <script>
     const iframe = document.querySelector('.dash-app iframe');
     if (iframe) {
+      console.log('Dash iframe found:', iframe.src);
       iframe.setAttribute('scrolling', 'no');
       iframe.style.overflow = 'hidden';
       iframe.addEventListener('load', () => {
         iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
       });
+    } else {
+      console.log('Dash iframe not found');
     }
   </script>
 {% endblock %}
