@@ -5,7 +5,6 @@ import plotly.express as px
 import os
 from django_plotly_dash import DjangoDash
 from data_management.data_loader import load_data
-from data_processing.prediction import make_prediction
 
 
 # Load data
@@ -52,14 +51,7 @@ app.layout = html.Div([
         dcc.Graph(id='feature-graph'),
     ], style={'margin-bottom': '50px'}),
 
-    html.Div(id='prediction-section', children=[
-        html.H2("Prediction", style={'textAlign': 'center'}),
-        html.Div([
-            html.Button('Predict', id='predict-button', n_clicks=0),
-            html.Div(id='prediction-output', style={'textAlign': 'center'})
-        ], style={'textAlign': 'center'}),
-    ], style={'background-color': '#f7f7f7', 'padding': '20px', 'border-top': '2px solid #ccc'}),
-], style={'height': '100vh', 'width': '100%'})
+], style={'width': '100%'})
 
 @app.callback(
     Output('feature-dropdown', 'options'),
@@ -86,16 +78,6 @@ def update_graph(selected_tab, selected_features):
     fig = px.line(df, x='Date', y=selected_features, title=f'Time Series for Selected Features')
     return fig
 
-@app.callback(
-    Output('prediction-output', 'children'),
-    [Input('predict-button', 'n_clicks')],
-    prevent_initial_call=True
-)
-def update_output(n_clicks):
-    if n_clicks > 0:
-        fig = make_prediction()
-        return dcc.Graph(figure=fig)
-    return "Click Predict to get the predictions."
 
 if __name__ == '__main__':
     app.run_server(port=8000, debug=False)

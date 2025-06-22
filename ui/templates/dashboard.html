@@ -4,6 +4,10 @@
 
 {% block title %}Dashboard • ET4D{% endblock %}
 
+{% block extra_css %}
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+{% endblock %}
+
 {% block content %}
   <div class="row mb-5">
     <div class="col-12 col-lg-8">
@@ -29,8 +33,10 @@
   </div>
 
   {# Here we mount the Dash app #}
-  <div class="card shadow-sm p-3">
-    {% plotly_app name="FarmTimeSeries" %}
+  <div class="card shadow-sm p-3 dash-app-section">
+    <div class="dash-app">
+      {% plotly_app name="dashapp" %}
+    </div>
   </div>
 {% endblock %}
 
