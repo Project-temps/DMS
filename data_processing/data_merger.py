@@ -1,3 +1,5 @@
+"""Merge individual sensor CSV files into a single dataset."""
+
 import pandas as pd
 import os
 import json

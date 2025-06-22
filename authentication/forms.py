@@ -1,4 +1,4 @@
-# authentication/forms.py
+"""Forms for user registration and login."""
 from django import forms
 from django.contrib.auth.models import User
 from .models import Profile

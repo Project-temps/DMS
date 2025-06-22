@@ -1,3 +1,5 @@
+"""Calculate Temperature-Humidity Index (THI) from processed data."""
+
 import pandas as pd
 import os
 

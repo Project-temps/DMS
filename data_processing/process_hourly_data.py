@@ -1,3 +1,5 @@
+"""Process sensor data files and resample them to hourly intervals."""
+
 import os
 import pandas as pd
 
