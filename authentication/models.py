@@ -15,6 +15,6 @@ class Profile(models.Model):
     country = models.CharField(max_length=100, blank=True)
     farm_address = models.TextField(blank=True)
 
-    # در صورت نیاز می‌توانید فیلدهای بیشتری اضافه کنید
+    # Add more fields here if needed
     def __str__(self):
         return f"{self.user.username} ({self.group})"

@@ -7,7 +7,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from .models import Profile
 
-# یک کلاس inline برای نمایش Profile همراه با User
+# Inline class to show Profile with User
 class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False
@@ -15,7 +15,7 @@ class ProfileInline(admin.StackedInline):
     fk_name = 'user'
 
 
-# سفارشی‌سازی UserAdmin اصلی
+# Customize the default UserAdmin
 class UserAdmin(BaseUserAdmin):
     inlines = (ProfileInline,)
     list_display = (
@@ -46,6 +46,6 @@ class UserAdmin(BaseUserAdmin):
         return super(UserAdmin, self).get_inline_instances(request, obj)
 
 
-# ثبت تغییرات در پنل ادمین
+# Register modifications in the admin panel
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
