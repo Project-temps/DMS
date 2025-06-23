@@ -1,7 +1,7 @@
 """Dash app for visualizing environmental data inside Django."""
 
 import dash
-from dash import dcc, html, Input, Output
+from dash import dcc, html, Input, Output, State
 import pandas as pd
 import plotly.express as px
 import os
@@ -17,7 +17,12 @@ logger.info("Initializing Dash app")
 # Load hourly aggregated data
 logger.info("Loading data for dashapp")
 try:
-    df = load_data('hourly_merged_sensor_data.csv')
+    df_germany = load_data('hourly_merged_sensor_data.csv', region='Germany')
+    df_germany['region'] = 'Germany'
+    df_poland = load_data('hourly_merged_sensor_data.csv', region='Poland')
+    df_poland['region'] = 'Poland'
+    df = pd.concat([df_germany, df_poland], ignore_index=True)
+    df['datetime'] = pd.to_datetime(df['datetime'])
     logger.info("Data loaded successfully with shape %s", df.shape)
 except FileNotFoundError as e:
     logger.exception("Data file could not be loaded: %s", e)
@@ -53,6 +58,24 @@ app.layout = html.Div([
 
     html.Div(id='visualization-section', children=[
         html.P("Select a tab to visualize time series data.", style={'textAlign': 'center'}),
+        html.Div([
+            dcc.Checklist(
+                id='dataset-checklist',
+                options=[
+                    {'label': 'Germany', 'value': 'Germany'},
+                    {'label': 'Poland', 'value': 'Poland'}
+                ],
+                value=['Germany', 'Poland'],
+                inline=True,
+                style={'margin-right': '20px'}
+            ),
+            dcc.DatePickerRange(
+                id='date-range',
+                start_date=df['datetime'].min().date() if not df.empty else None,
+                end_date=df['datetime'].max().date() if not df.empty else None,
+            ),
+            html.Button('Export CSV', id='export-btn', n_clicks=0, className='btn btn-primary ms-3')
+        ], style={'display': 'flex', 'alignItems': 'center', 'padding': '10px'}),
         dcc.Tabs(id='feature-tabs', value='tab-CO2', children=[
             dcc.Tab(label=group, value=f'tab-{group}') for group in feature_groups.keys()
         ]),
@@ -64,6 +87,7 @@ app.layout = html.Div([
             style={'height': '70vh', 'width': '100%'},
             config={'responsive': True}
         ),
+        dcc.Download(id='download-data'),
     ], style={'margin-bottom': '50px'}),
 
 ], style={'width': '100%'})
@@ -85,19 +109,50 @@ def set_features_value(available_options):
 
 @app.callback(
     Output('feature-graph', 'figure'),
-    [Input('feature-tabs', 'value'), Input('feature-dropdown', 'value')]
+    [
+        Input('feature-tabs', 'value'),
+        Input('feature-dropdown', 'value'),
+        Input('dataset-checklist', 'value'),
+        Input('date-range', 'start_date'),
+        Input('date-range', 'end_date')
+    ]
 )
-def update_graph(selected_tab, selected_features):
-    if not selected_features:
+def update_graph(selected_tab, selected_features, datasets, start_date, end_date):
+    if not selected_features or not datasets:
         return dash.no_update
+
+    dff = df[df['region'].isin(datasets)]
+    if start_date and end_date:
+        dff = dff[(dff['datetime'] >= start_date) & (dff['datetime'] <= end_date)]
+
     fig = px.line(
-        df,
+        dff,
         x='datetime',
         y=selected_features,
-        title=f'Time Series for Selected Features'
+        color='region',
+        title='Time Series for Selected Features'
     )
     fig.update_layout(autosize=True)
     return fig
+
+
+@app.callback(
+    Output('download-data', 'data'),
+    Input('export-btn', 'n_clicks'),
+    State('dataset-checklist', 'value'),
+    State('feature-dropdown', 'value'),
+    State('date-range', 'start_date'),
+    State('date-range', 'end_date'),
+    prevent_initial_call=True
+)
+def export_data(n_clicks, datasets, selected_features, start_date, end_date):
+    if not datasets or not selected_features:
+        return dash.no_update
+    dff = df[df['region'].isin(datasets)]
+    if start_date and end_date:
+        dff = dff[(dff['datetime'] >= start_date) & (dff['datetime'] <= end_date)]
+    dff = dff[['datetime', 'region'] + selected_features]
+    return dcc.send_data_frame(dff.to_csv, 'environmental_data.csv')
 
 
 if __name__ == '__main__':
