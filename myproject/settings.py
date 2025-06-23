@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'api',
     'compressor',
     'crispy_forms',
+    'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -160,3 +161,4 @@ STATICFILES_FINDERS = [
 
 # Use Bootstrap 4 styling for django-crispy-forms
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_ALLOWED_TEMPLATE_PACKS = ["bootstrap4"]
