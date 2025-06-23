@@ -59,7 +59,11 @@ app.layout = html.Div([
         html.Div([
             dcc.Dropdown(id='feature-dropdown', multi=True)
         ], style={'width': '50%', 'padding': '20px'}),
-        dcc.Graph(id='feature-graph'),
+        dcc.Graph(
+            id='feature-graph',
+            style={'height': '70vh', 'width': '100%'},
+            config={'responsive': True}
+        ),
     ], style={'margin-bottom': '50px'}),
 
 ], style={'width': '100%'})
@@ -86,7 +90,13 @@ def set_features_value(available_options):
 def update_graph(selected_tab, selected_features):
     if not selected_features:
         return dash.no_update
-    fig = px.line(df, x='datetime', y=selected_features, title=f'Time Series for Selected Features')
+    fig = px.line(
+        df,
+        x='datetime',
+        y=selected_features,
+        title=f'Time Series for Selected Features'
+    )
+    fig.update_layout(autosize=True)
     return fig
 
 
