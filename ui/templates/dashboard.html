@@ -16,6 +16,19 @@
         readings, THI calculations and machine-learning forecasts to help you keep herds
         healthy and barns efficient.
       </p>
+      
+  </div>
+
+  {# Here we mount the Dash app #}
+  <div class="card shadow-sm p-3 dash-app-section">
+    <div class="dash-app">
+      {# Embed the Dash application directly without an iframe #}
+      {% plotly_direct name="dashapp" %}
+    </div>
+  </div>
+
+
+  <div class="col-12 col-lg-8">
       <div class="alert alert-primary d-flex align-items-center" role="alert">
         <i class="bx bx-lock-open me-2 fs-4"></i>
         <div>
@@ -29,14 +42,6 @@
     <div class="col-12 col-lg-4 text-center">
       <img src="{% static 'sneat/assets/img/illustrations/man-with-laptop-light.png' %}"
            class="img-fluid" style="max-height:250px;" alt="Dashboard illustration">
-    </div>
-  </div>
-
-  {# Here we mount the Dash app #}
-  <div class="card shadow-sm p-3 dash-app-section">
-    <div class="dash-app">
-      {# Embed the Dash application directly without an iframe #}
-      {% plotly_direct name="dashapp" %}
     </div>
   </div>
 {% endblock %}
