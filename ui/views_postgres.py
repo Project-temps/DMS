@@ -14,8 +14,15 @@ logger = logging.getLogger(__name__)
 from data_management.calculate_thi import calculate_thi  # Import the function
 
 def get_thi_data(request):
-    thi_data = calculate_thi()  # Call the function to calculate THI
-    thi_data_json = thi_data.to_json(orient='records', date_format='iso')  # Convert to JSON
+    germany_data, poland_data = calculate_thi()
+    thi_data = pd.concat(
+        [
+            germany_data[["datetime", "thi"]].assign(country="Germany"),
+            poland_data[["datetime", "thi"]].assign(country="Poland"),
+        ],
+        ignore_index=True,
+    )
+    thi_data_json = thi_data.to_json(orient="records", date_format="iso")
     return JsonResponse(thi_data_json, safe=False)
 
 # Views for static pages
