@@ -1,9 +1,9 @@
 """Dash app for visualizing environmental data inside Django."""
 
 import dash
-from dash import dcc, html, Input, Output
+from dash import dcc, html, Input, Output, State
 import pandas as pd
-import plotly.express as px
+import plotly.graph_objs as go
 import os
 import logging
 from django_plotly_dash import DjangoDash
@@ -17,11 +17,28 @@ logger.info("Initializing Dash app")
 # Load hourly aggregated data
 logger.info("Loading data for dashapp")
 try:
-    df = load_data('hourly_merged_sensor_data.csv')
-    logger.info("Data loaded successfully with shape %s", df.shape)
+    df_germany = load_data('hourly_merged_sensor_data.csv', country='Germany')
+    df_poland = load_data('hourly_merged_sensor_data.csv', country='Poland')
+
+    # ensure datetime columns are parsed
+    df_germany['datetime'] = pd.to_datetime(df_germany['datetime'])
+    df_poland['datetime'] = pd.to_datetime(df_poland['datetime'])
+
+    dataframes = {
+        'Germany': df_germany,
+        'Poland': df_poland,
+    }
+    min_date = min(df_germany['datetime'].min(), df_poland['datetime'].min())
+    max_date = max(df_germany['datetime'].max(), df_poland['datetime'].max())
+    logger.info(
+        "Data loaded successfully: DE %s, PL %s",
+        df_germany.shape,
+        df_poland.shape,
+    )
 except FileNotFoundError as e:
     logger.exception("Data file could not be loaded: %s", e)
-    df = pd.DataFrame()
+    dataframes = {'Germany': pd.DataFrame(), 'Poland': pd.DataFrame()}
+    min_date = max_date = None
     
 # from flask_cors import CORS
 
@@ -47,7 +64,6 @@ feature_groups = {
 }
 
 
-
 app.layout = html.Div([
     html.H1("Environmental Data Visualization Dashboard", style={'textAlign': 'center'}),
 
@@ -58,7 +74,25 @@ app.layout = html.Div([
         ]),
         html.Div([
             dcc.Dropdown(id='feature-dropdown', multi=True)
-        ], style={'width': '50%', 'padding': '20px'}),
+        ], style={'width': '50%', 'padding': '10px'}),
+        html.Div([
+            dcc.Checklist(
+                id='dataset-toggle',
+                options=[{'label': 'Germany', 'value': 'Germany'},
+                         {'label': 'Poland', 'value': 'Poland'}],
+                value=['Germany', 'Poland'],
+                labelStyle={'margin-right': '10px'}
+            )
+        ], style={'padding': '10px'}),
+        dcc.DatePickerRange(
+            id='date-range',
+            min_date_allowed=min_date,
+            max_date_allowed=max_date,
+            start_date=min_date,
+            end_date=max_date
+        ),
+        html.Button('Export CSV', id='export-button', n_clicks=0, style={'margin': '10px'}),
+        dcc.Download(id='download-data'),
         dcc.Graph(
             id='feature-graph',
             style={'height': '70vh', 'width': '100%'},
@@ -85,19 +119,68 @@ def set_features_value(available_options):
 
 @app.callback(
     Output('feature-graph', 'figure'),
-    [Input('feature-tabs', 'value'), Input('feature-dropdown', 'value')]
+    [
+        Input('feature-tabs', 'value'),
+        Input('feature-dropdown', 'value'),
+        Input('dataset-toggle', 'value'),
+        Input('date-range', 'start_date'),
+        Input('date-range', 'end_date'),
+    ]
 )
-def update_graph(selected_tab, selected_features):
-    if not selected_features:
+def update_graph(selected_tab, selected_features, selected_datasets, start_date, end_date):
+    if not selected_features or not selected_datasets:
         return dash.no_update
-    fig = px.line(
-        df,
-        x='datetime',
-        y=selected_features,
-        title=f'Time Series for Selected Features'
-    )
-    fig.update_layout(autosize=True)
+
+    fig = go.Figure()
+    for dataset in selected_datasets:
+        df = dataframes.get(dataset, pd.DataFrame())
+        if df.empty:
+            continue
+        mask = (df['datetime'] >= start_date) & (df['datetime'] <= end_date)
+        filtered = df.loc[mask]
+        for feature in selected_features:
+            if feature in filtered.columns:
+                fig.add_trace(
+                    go.Scatter(
+                        x=filtered['datetime'],
+                        y=filtered[feature],
+                        mode='lines',
+                        name=f'{dataset} {feature}',
+                    )
+                )
+
+    fig.update_layout(title='Time Series for Selected Features', autosize=True)
     return fig
+
+
+@app.callback(
+    Output('download-data', 'data'),
+    Input('export-button', 'n_clicks'),
+    State('feature-dropdown', 'value'),
+    State('dataset-toggle', 'value'),
+    State('date-range', 'start_date'),
+    State('date-range', 'end_date'),
+    prevent_initial_call=True,
+)
+def export_data(n_clicks, selected_features, selected_datasets, start_date, end_date):
+    if not selected_features or not selected_datasets:
+        return dash.no_update
+
+    frames = []
+    for dataset in selected_datasets:
+        df = dataframes.get(dataset, pd.DataFrame())
+        if df.empty:
+            continue
+        mask = (df['datetime'] >= start_date) & (df['datetime'] <= end_date)
+        filtered = df.loc[mask, ['datetime'] + selected_features].copy()
+        filtered['dataset'] = dataset
+        frames.append(filtered)
+
+    if not frames:
+        return dash.no_update
+
+    result = pd.concat(frames)
+    return dcc.send_data_frame(result.to_csv, 'export.csv', index=False)
 
 
 if __name__ == '__main__':
