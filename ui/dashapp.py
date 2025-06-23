@@ -24,6 +24,18 @@ try:
     df_germany['datetime'] = pd.to_datetime(df_germany['datetime'], utc=True)
     df_poland['datetime'] = pd.to_datetime(df_poland['datetime'], utc=True)
 
+    # Calculate THI for each row using temperature and humidity
+    df_germany["thi"] = (
+        (1.8 * df_germany["temperature"] + 32)
+        - ((0.55 - 0.0055 * df_germany["humidity"])
+           * (1.8 * df_germany["temperature"] - 26))
+    )
+    df_poland["thi"] = (
+        (1.8 * df_poland["temperature"] + 32)
+        - ((0.55 - 0.0055 * df_poland["humidity"])
+           * (1.8 * df_poland["temperature"] - 26))
+    )
+
     dataframes = {
         'Germany': df_germany,
         'Poland': df_poland,
@@ -60,7 +72,8 @@ feature_groups = {
     'NH3': ['nh3'],
     'Temperature': ['temperature'],
     'Humidity': ['humidity'],
-    'Wind': ['wind_ns', 'wind_ew']
+    'Wind': ['wind_ns', 'wind_ew'],
+    'THI Index': ['thi']
 }
 
 
