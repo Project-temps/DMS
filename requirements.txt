@@ -5,6 +5,7 @@ Django==5.0
 django-appconf==1.1.0
 django-compressor==4.5.1
 django-crispy-forms==2.4
+crispy-bootstrap4==2025.6
 django-cors-headers==4.3.1
 django-plotly-dash==2.3.1
 django-tailwind==3.8.0
