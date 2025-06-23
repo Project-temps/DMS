@@ -8,6 +8,7 @@ import os
 import logging
 from django_plotly_dash import DjangoDash
 from data_management.data_loader import load_data
+from data_management.calculate_thi import add_thi_column
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -24,17 +25,9 @@ try:
     df_germany['datetime'] = pd.to_datetime(df_germany['datetime'], utc=True)
     df_poland['datetime'] = pd.to_datetime(df_poland['datetime'], utc=True)
 
-    # Calculate THI for each row using temperature and humidity
-    df_germany["thi"] = (
-        (1.8 * df_germany["temperature"] + 32)
-        - ((0.55 - 0.0055 * df_germany["humidity"])
-           * (1.8 * df_germany["temperature"] - 26))
-    )
-    df_poland["thi"] = (
-        (1.8 * df_poland["temperature"] + 32)
-        - ((0.55 - 0.0055 * df_poland["humidity"])
-           * (1.8 * df_poland["temperature"] - 26))
-    )
+    # Append THI column using shared helper
+    df_germany = add_thi_column(df_germany)
+    df_poland = add_thi_column(df_poland)
 
     dataframes = {
         'Germany': df_germany,
