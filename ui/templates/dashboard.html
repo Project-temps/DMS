@@ -9,26 +9,34 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row mb-5">
+<div class="container-xxl flex-grow-1 container-p-y">
+
+  <!-- Intro section -->
+  <div class="row mb-4">
     <div class="col-12 col-lg-8">
       <p class="lead">
         The Environmental Traits for Dairy (ET4D) dashboard aggregates real-time sensor
         readings, THI calculations and machine-learning forecasts to help you keep herds
         healthy and barns efficient.
       </p>
-      
-  </div>
-
-  {# Here we mount the Dash app #}
-  <div class="card shadow-sm p-3 dash-app-section">
-    <div class="dash-app">
-      {# Embed the Dash application directly without an iframe #}
-      {% plotly_direct name="dashapp" %}
     </div>
   </div>
 
+  <!-- Dash app section -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card shadow-sm p-4 dash-app-section">
+        <div class="dash-app">
+          {# Embed the Dash application directly without an iframe #}
+          {% plotly_direct name="dashapp" %}
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <div class="col-12 col-lg-8">
+  <!-- Call to action -->
+  <div class="row align-items-center">
+    <div class="col-12 col-lg-8 mb-4 mb-lg-0">
       <div class="alert alert-primary d-flex align-items-center" role="alert">
         <i class="bx bx-lock-open me-2 fs-4"></i>
         <div>
@@ -37,12 +45,14 @@
         </div>
       </div>
       <a href="{% url 'register' %}" class="btn btn-success me-2">Create account</a>
-      <a href="{% url 'login' %}"    class="btn btn-outline-primary">Log in</a>
+      <a href="{% url 'login' %}" class="btn btn-outline-primary">Log in</a>
     </div>
     <div class="col-12 col-lg-4 text-center">
       <img src="{% static 'sneat/assets/img/illustrations/man-with-laptop-light.png' %}"
            class="img-fluid" style="max-height:250px;" alt="Dashboard illustration">
     </div>
   </div>
+
+</div>
 {% endblock %}
 
