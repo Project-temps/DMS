@@ -21,8 +21,8 @@ try:
     df_poland = load_data('hourly_merged_sensor_data.csv', country='Poland')
 
     # ensure datetime columns are parsed
-    df_germany['datetime'] = pd.to_datetime(df_germany['datetime'])
-    df_poland['datetime'] = pd.to_datetime(df_poland['datetime'])
+    df_germany['datetime'] = pd.to_datetime(df_germany['datetime'], utc=True)
+    df_poland['datetime'] = pd.to_datetime(df_poland['datetime'], utc=True)
 
     dataframes = {
         'Germany': df_germany,
@@ -89,7 +89,8 @@ app.layout = html.Div([
             min_date_allowed=min_date,
             max_date_allowed=max_date,
             start_date=min_date,
-            end_date=max_date
+            end_date=max_date,
+            display_format='YYYY-MM-DD HH:mm'
         ),
         html.Button('Export CSV', id='export-button', n_clicks=0, style={'margin': '10px'}),
         dcc.Download(id='download-data'),
@@ -131,12 +132,15 @@ def update_graph(selected_tab, selected_features, selected_datasets, start_date,
     if not selected_features or not selected_datasets:
         return dash.no_update
 
+    start_ts = pd.to_datetime(start_date, utc=True)
+    end_ts = pd.to_datetime(end_date, utc=True)
+
     fig = go.Figure()
     for dataset in selected_datasets:
         df = dataframes.get(dataset, pd.DataFrame())
         if df.empty:
             continue
-        mask = (df['datetime'] >= start_date) & (df['datetime'] <= end_date)
+        mask = (df['datetime'] >= start_ts) & (df['datetime'] <= end_ts)
         filtered = df.loc[mask]
         for feature in selected_features:
             if feature in filtered.columns:
@@ -166,12 +170,15 @@ def export_data(n_clicks, selected_features, selected_datasets, start_date, end_
     if not selected_features or not selected_datasets:
         return dash.no_update
 
+    start_ts = pd.to_datetime(start_date, utc=True)
+    end_ts = pd.to_datetime(end_date, utc=True)
+
     frames = []
     for dataset in selected_datasets:
         df = dataframes.get(dataset, pd.DataFrame())
         if df.empty:
             continue
-        mask = (df['datetime'] >= start_date) & (df['datetime'] <= end_date)
+        mask = (df['datetime'] >= start_ts) & (df['datetime'] <= end_ts)
         filtered = df.loc[mask, ['datetime'] + selected_features].copy()
         filtered['dataset'] = dataset
         frames.append(filtered)
