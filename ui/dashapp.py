@@ -72,8 +72,7 @@ feature_groups = {
     'NH3': ['nh3'],
     'Temperature': ['temperature'],
     'Humidity': ['humidity'],
-    'Wind': ['wind_ns', 'wind_ew'],
-    'THI Index': ['thi']
+    'Wind': ['wind_ns', 'wind_ew']
 }
 
 
@@ -112,6 +111,17 @@ app.layout = html.Div([
             style={'height': '70vh', 'width': '100%'},
             config={'responsive': True}
         ),
+    ], style={'margin-bottom': '50px'}),
+
+    html.Div(id='thi-section', children=[
+        html.H2("THI Index", style={'textAlign': 'center'}),
+        dcc.Graph(
+            id='thi-graph',
+            style={'height': '70vh', 'width': '100%'},
+            config={'responsive': True}
+        ),
+        html.Button('Export THI CSV', id='export-thi-button', n_clicks=0, style={'margin': '10px'}),
+        dcc.Download(id='download-thi-data'),
     ], style={'margin-bottom': '50px'}),
 
 ], style={'width': '100%'})
@@ -201,6 +211,74 @@ def export_data(n_clicks, selected_features, selected_datasets, start_date, end_
 
     result = pd.concat(frames)
     return dcc.send_data_frame(result.to_csv, 'export.csv', index=False)
+
+
+@app.callback(
+    Output('thi-graph', 'figure'),
+    [
+        Input('dataset-toggle', 'value'),
+        Input('date-range', 'start_date'),
+        Input('date-range', 'end_date'),
+    ]
+)
+def update_thi_graph(selected_datasets, start_date, end_date):
+    if not selected_datasets:
+        return dash.no_update
+
+    start_ts = pd.to_datetime(start_date, utc=True)
+    end_ts = pd.to_datetime(end_date, utc=True)
+
+    fig = go.Figure()
+    for dataset in selected_datasets:
+        df = dataframes.get(dataset, pd.DataFrame())
+        if df.empty:
+            continue
+        mask = (df['datetime'] >= start_ts) & (df['datetime'] <= end_ts)
+        filtered = df.loc[mask]
+        if 'thi' in filtered.columns:
+            fig.add_trace(
+                go.Scatter(
+                    x=filtered['datetime'],
+                    y=filtered['thi'],
+                    mode='lines',
+                    name=f'{dataset} THI',
+                )
+            )
+
+    fig.update_layout(title='Temperature-Humidity Index', autosize=True)
+    return fig
+
+
+@app.callback(
+    Output('download-thi-data', 'data'),
+    Input('export-thi-button', 'n_clicks'),
+    State('dataset-toggle', 'value'),
+    State('date-range', 'start_date'),
+    State('date-range', 'end_date'),
+    prevent_initial_call=True,
+)
+def export_thi_data(n_clicks, selected_datasets, start_date, end_date):
+    if not selected_datasets:
+        return dash.no_update
+
+    start_ts = pd.to_datetime(start_date, utc=True)
+    end_ts = pd.to_datetime(end_date, utc=True)
+
+    frames = []
+    for dataset in selected_datasets:
+        df = dataframes.get(dataset, pd.DataFrame())
+        if df.empty:
+            continue
+        mask = (df['datetime'] >= start_ts) & (df['datetime'] <= end_ts)
+        filtered = df.loc[mask, ['datetime', 'thi']].copy()
+        filtered['dataset'] = dataset
+        frames.append(filtered)
+
+    if not frames:
+        return dash.no_update
+
+    result = pd.concat(frames)
+    return dcc.send_data_frame(result.to_csv, 'thi_export.csv', index=False)
 
 
 if __name__ == '__main__':
