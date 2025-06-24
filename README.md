@@ -31,3 +31,12 @@ DMS (Data Management System) combines Django with Dash to provide interactive da
 ## Usage
 
 After starting the server, visit `http://127.0.0.1:8000` to access the web interface and dashboards. Log in with the superuser credentials to manage data and users.
+
+## License
+
+This project is distributed under the [MIT License](LICENSE). Usage, distribution or modification of the software requires explicit permission from the authors. See the license file for the complete terms.
+
+Third-party assets are included under their respective licenses:
+
+- Icons in `ui/static/admin/img` originate from the Font Awesome project and are covered by both the MIT License and the SIL Open Font License. Refer to [`ui/static/admin/img/README.txt`](ui/static/admin/img/README.txt) and [`ui/static/admin/img/LICENSE`](ui/static/admin/img/LICENSE) for details.
+- HTML templates in `ui/templates/sneat_html` are based on ThemeSelection's Sneat Bootstrap template and require a valid license from ThemeSelection, as noted in the comments within those files (e.g. `ui/templates/sneat_html/ui-footer.html`).
