@@ -71,7 +71,7 @@ feature_groups = {
 
 app.layout = html.Div([
     html.H1(
-        "Environmental Data Visualization Dashboard",
+        "Dashboard",
         style={"textAlign": "center"},
     ),
 
