@@ -70,54 +70,146 @@ feature_groups = {
 
 
 app.layout = html.Div([
-    html.H1("Environmental Data Visualization Dashboard", style={'textAlign': 'center'}),
+    html.H1(
+        "Environmental Data Visualization Dashboard",
+        style={"textAlign": "center"},
+    ),
 
-    html.Div(id='visualization-section', children=[
-        html.P("Select a tab to visualize time series data.", style={'textAlign': 'center'}),
-        dcc.Tabs(id='feature-tabs', value='tab-CO2', children=[
-            dcc.Tab(label=group, value=f'tab-{group}') for group in feature_groups.keys()
-        ]),
-        html.Div([
-            dcc.Dropdown(id='feature-dropdown', multi=True)
-        ], style={'width': '50%', 'padding': '10px'}),
-        html.Div([
-            dcc.Checklist(
-                id='dataset-toggle',
-                options=[{'label': 'Germany', 'value': 'Germany'},
-                         {'label': 'Poland', 'value': 'Poland'}],
-                value=['Germany', 'Poland'],
-                labelStyle={'margin-right': '10px'}
+    # --- Live sensor panel and Environmental footprint ---
+    html.Div(
+        id="visualization-section",
+        className="card mb-4",
+        children=[
+            html.Div(
+                className="card-body",
+                children=[
+                    html.H2(
+                        "Live sensor panel and Environmental footprint",
+                        style={"textAlign": "center"},
+                    ),
+                    html.P(
+                        "Select a tab to visualize time series data.",
+                        style={"textAlign": "center"},
+                    ),
+                    dcc.Tabs(
+                        id="feature-tabs",
+                        value="tab-CO2",
+                        children=[
+                            dcc.Tab(label=group, value=f"tab-{group}")
+                            for group in feature_groups.keys()
+                        ],
+                    ),
+                    html.Div(
+                        [dcc.Dropdown(id="feature-dropdown", multi=True)],
+                        style={"width": "50%", "padding": "10px"},
+                    ),
+                    html.Div(
+                        [
+                            dcc.Checklist(
+                                id="dataset-toggle",
+                                options=[
+                                    {"label": "Germany", "value": "Germany"},
+                                    {"label": "Poland", "value": "Poland"},
+                                ],
+                                value=["Germany", "Poland"],
+                                labelStyle={"margin-right": "10px"},
+                            )
+                        ],
+                        style={"padding": "10px"},
+                    ),
+                    dcc.DatePickerRange(
+                        id="date-range",
+                        min_date_allowed=min_date,
+                        max_date_allowed=max_date,
+                        start_date=min_date,
+                        end_date=max_date,
+                        display_format="YYYY-MM-DD HH:mm",
+                    ),
+                    html.Button(
+                        "Export CSV",
+                        id="export-button",
+                        n_clicks=0,
+                        style={"margin": "10px"},
+                    ),
+                    dcc.Download(id="download-data"),
+                    dcc.Graph(
+                        id="feature-graph",
+                        style={"height": "70vh", "width": "100%"},
+                        config={"responsive": True},
+                    ),
+                ],
             )
-        ], style={'padding': '10px'}),
-        dcc.DatePickerRange(
-            id='date-range',
-            min_date_allowed=min_date,
-            max_date_allowed=max_date,
-            start_date=min_date,
-            end_date=max_date,
-            display_format='YYYY-MM-DD HH:mm'
-        ),
-        html.Button('Export CSV', id='export-button', n_clicks=0, style={'margin': '10px'}),
-        dcc.Download(id='download-data'),
-        dcc.Graph(
-            id='feature-graph',
-            style={'height': '70vh', 'width': '100%'},
-            config={'responsive': True}
-        ),
-    ], style={'margin-bottom': '50px'}),
+        ],
+    ),
 
-    html.Div(id='thi-section', children=[
-        html.H2("THI Index", style={'textAlign': 'center'}),
-        dcc.Graph(
-            id='thi-graph',
-            style={'height': '70vh', 'width': '100%'},
-            config={'responsive': True}
-        ),
-        html.Button('Export THI CSV', id='export-thi-button', n_clicks=0, style={'margin': '10px'}),
-        dcc.Download(id='download-thi-data'),
-    ], style={'margin-bottom': '50px'}),
+    # --- Animal welfare ---
+    html.Div(
+        id="thi-section",
+        className="card mb-4",
+        children=[
+            html.Div(
+                className="card-body",
+                children=[
+                    html.H2("Animal welfare", style={"textAlign": "center"}),
+                    dcc.Graph(
+                        id="thi-graph",
+                        style={"height": "70vh", "width": "100%"},
+                        config={"responsive": True},
+                    ),
+                    html.Button(
+                        "Export THI CSV",
+                        id="export-thi-button",
+                        n_clicks=0,
+                        style={"margin": "10px"},
+                    ),
+                    dcc.Download(id="download-thi-data"),
+                ],
+            )
+        ],
+    ),
 
-], style={'width': '100%'})
+    # --- Nutritional value ---
+    html.Div(
+        id="nutrition-section",
+        className="card mb-4",
+        children=[
+            html.Div(
+                className="card-body",
+                children=[
+                    html.H2(
+                        "Nutritional value",
+                        style={"textAlign": "center"},
+                    ),
+                    html.P(
+                        "Milk data and composition will be displayed here.",
+                        className="text-center",
+                    ),
+                ],
+            )
+        ],
+    ),
+
+    # --- Production region ---
+    html.Div(
+        id="production-region-section",
+        className="card mb-4",
+        children=[
+            html.Div(
+                className="card-body",
+                children=[
+                    html.H2(
+                        "Production region",
+                        style={"textAlign": "center"},
+                    ),
+                    html.P(
+                        "Farm location and size information will be displayed here.",
+                        className="text-center",
+                    ),
+                ],
+            )
+        ],
+    ),
+], style={"width": "100%"})
 
 @app.callback(
     Output('feature-dropdown', 'options'),
