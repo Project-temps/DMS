@@ -13,6 +13,11 @@ class HomePageTests(TestCase):
         self.assertContains(response, 'EU-recommended thresholds')
 
 
+    def test_allerts_page_loads(self):
+        response = self.client.get('/allerts/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'EU-recommended thresholds')
+
 class StatisticsFunctionTests(TestCase):
     def test_calculate_statistics(self):
         chart_data = [
