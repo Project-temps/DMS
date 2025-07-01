@@ -49,7 +49,7 @@ class DashLayoutContentTests(TestCase):
         self.assertIn("General farm location", layout_str)
         self.assertIn("Farm size.", layout_str)
         self.assertIn(
-            "In Turkey (annual entry): Annual energy consumption.",
+            "In Turkey (manual entry): Annual energy consumption.",
             layout_str,
         )
         self.assertIn("Ventilation specs", layout_str)
