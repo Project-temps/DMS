@@ -13,10 +13,16 @@ __pycache__/
 *$py.class
 *.so
 
+# Python packaging and testing artifacts
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.coverage
+
 # Django
 *.log
 *.pot
-*.pyc
 *.sqlite3
 *.db
 db.sqlite3
