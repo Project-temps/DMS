@@ -146,6 +146,10 @@ def dashboard(request):
         'parameters': parameters  # Pass parameters to the template
     })
 
+def allerts(request):
+    """Display threshold information and placeholder alert stats."""
+    return render(request, 'allerts.html')
+
 def contact(request):
     return render(request, 'contact.html')
 

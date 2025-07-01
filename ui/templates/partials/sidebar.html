@@ -36,6 +36,13 @@
       </a>
     </li>
 
+    <li class="menu-item{% if request.resolver_match.url_name == 'allerts' %} active{% endif %}">
+      <a href="{% url 'allerts' %}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-error"></i>
+        <div>Allerts</div>
+      </a>
+    </li>
+
     <li class="menu-item{% if request.resolver_match.url_name == 'survey' %} active{% endif %}">
       <a href="{% url 'survey' %}" class="menu-link">
         <i class="menu-icon tf-icons bx bx-edit"></i>
