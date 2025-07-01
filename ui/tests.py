@@ -42,4 +42,14 @@ class DashLayoutContentTests(TestCase):
         self.assertIn("Kazova Farm", layout_str)
         self.assertIn("Uncertainty ranges of sensors", layout_str)
         self.assertIn("Energy consumption", layout_str)
+        self.assertIn(
+            "In Turkey: Milk data and milk composition (manual entry option).",
+            layout_str,
+        )
+        self.assertIn("General farm location", layout_str)
+        self.assertIn("Farm size.", layout_str)
+        self.assertIn(
+            "In Turkey (annual entry): Annual energy consumption.",
+            layout_str,
+        )
         self.assertIn("Ventilation specs", layout_str)

@@ -153,7 +153,14 @@ app.layout = html.Div(
                             ]
                         ),
                         html.H3("Offline data"),
-                        html.Ul([html.Li("Uncertainty ranges of sensors")]),
+                        html.Ul(
+                            [
+                                html.Li(
+                                    "In Turkey: Milk data and milk composition (manual entry option)."
+                                ),
+                                html.Li("Uncertainty ranges of sensors"),
+                            ]
+                        ),
                         html.H3("Calculated data"),
                         html.Ul(
                             [
@@ -207,6 +214,10 @@ app.layout = html.Div(
                         html.H3("Offline data"),
                         html.Ul(
                             [
+                                html.Li(
+                                    "In Turkey (annual entry): Annual energy consumption."
+                                ),
+                                html.Li("Uncertainty ranges of sensors"),
                                 html.Li("Uncertainty ranges of sensors"),
                                 html.Li("Ventilation specs"),
                                 html.Li("Bedding space"),
@@ -313,8 +324,8 @@ app.layout = html.Div(
                         html.H3("Live data"),
                         html.Ul(
                             [
-                                html.Li("Farm geolocation coordinates"),
-                                html.Li("Land size - Later will be available"),
+                                html.Li("General farm location"),
+                                html.Li("Farm size."),
                             ]
                         ),
                         html.H3("Offline data"),
