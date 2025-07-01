@@ -133,6 +133,28 @@ app.layout = html.Div(
                             end_date=max_date,
                             display_format="YYYY-MM-DD HH:mm",
                         ),
+                        html.H3("Live data"),
+                        html.Ul(
+                            [
+                                html.Li("dust concentration"),
+                                html.Li("CO₂"),
+                                html.Li("temperatures"),
+                                html.Li("humidity"),
+                                html.Li("Kazova Farm indoor/outdoor"),
+                                html.Li("ESPA Farm indoor/outdoor"),
+                            ]
+                        ),
+                        html.H3("Offline data"),
+                        html.Ul([html.Li("Uncertainty ranges of sensors")]),
+                        html.H3("Calculated data"),
+                        html.Ul(
+                            [
+                                html.Li("Mean, min, max, median values"),
+                                html.Li(
+                                    "Percentage of time outside the recommended range (EU-recommended thresholds)"
+                                ),
+                            ]
+                        ),
                         html.Button(
                             "Export CSV",
                             id="export-button",
@@ -165,6 +187,25 @@ app.layout = html.Div(
                         html.P(
                             "Additional animal welfare metrics will be integrated later.",
                             className="text-center text-muted",
+                        ),
+                        html.H3("Live data"),
+                        html.Ul(
+                            [
+                                html.Li("Real-time THI values"),
+                                html.Li("Stress indicator sensors - Later will be available"),
+                                html.Li("Activity levels - Later will be available"),
+                            ]
+                        ),
+                        html.H3("Offline data"),
+                        html.Ul([html.Li("Uncertainty ranges of sensors")]),
+                        html.H3("Calculated data"),
+                        html.Ul(
+                            [
+                                html.Li("Mean, min, max, median values"),
+                                html.Li(
+                                    "Percentage of time outside the recommended range (EU-recommended thresholds)"
+                                ),
+                            ]
                         ),
                         dcc.Graph(
                             id="thi-graph",
@@ -202,6 +243,26 @@ app.layout = html.Div(
                             "Detailed nutritional metrics are not yet available.",
                             className="text-center text-muted",
                         ),
+                        html.H3("Live data"),
+                        html.Ul(
+                            [
+                                html.Li("Milk yield sensors - Later will be available"),
+                                html.Li(
+                                    "Fat, protein, lactose content - Later will be available"
+                                ),
+                            ]
+                        ),
+                        html.H3("Offline data"),
+                        html.Ul([html.Li("Uncertainty ranges of sensors")]),
+                        html.H3("Calculated data"),
+                        html.Ul(
+                            [
+                                html.Li("Mean, min, max, median values"),
+                                html.Li(
+                                    "Percentage of time outside the recommended range (EU-recommended thresholds)"
+                                ),
+                            ]
+                        ),
                     ],
                 )
             ],
@@ -226,6 +287,24 @@ app.layout = html.Div(
                             "Data for additional regions will be added soon.",
                             className="text-center text-muted",
                         ),
+                        html.H3("Live data"),
+                        html.Ul(
+                            [
+                                html.Li("Farm geolocation coordinates"),
+                                html.Li("Land size - Later will be available"),
+                            ]
+                        ),
+                        html.H3("Offline data"),
+                        html.Ul([html.Li("Uncertainty ranges of sensors")]),
+                        html.H3("Calculated data"),
+                        html.Ul(
+                            [
+                                html.Li("Mean, min, max, median values"),
+                                html.Li(
+                                    "Percentage of time outside the recommended range (EU-recommended thresholds)"
+                                ),
+                            ]
+                        ),
                     ],
                 )
             ],
@@ -245,6 +324,24 @@ app.layout = html.Div(
                         html.P(
                             "Energy consumption data will be displayed here when available.",
                             className="text-center text-muted",
+                        ),
+                        html.H3("Live data"),
+                        html.Ul(
+                            [
+                                html.Li("Current electricity usage - Later will be available"),
+                                html.Li("Total consumption - Later will be available"),
+                            ]
+                        ),
+                        html.H3("Offline data"),
+                        html.Ul([html.Li("Uncertainty ranges of sensors")]),
+                        html.H3("Calculated data"),
+                        html.Ul(
+                            [
+                                html.Li("Mean, min, max, median values"),
+                                html.Li(
+                                    "Percentage of time outside the recommended range (EU-recommended thresholds)"
+                                ),
+                            ]
                         ),
                     ],
                 )

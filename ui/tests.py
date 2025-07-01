@@ -28,3 +28,12 @@ class DashboardTests(TestCase):
     def test_dashboard_page_loads(self):
         response = self.client.get("/dashboard/")
         self.assertEqual(response.status_code, 200)
+
+
+class DashLayoutContentTests(TestCase):
+    def test_layout_contains_placeholders(self):
+        from ui.dashapp import app
+        layout_str = str(app.layout)
+        self.assertIn("Kazova Farm", layout_str)
+        self.assertIn("Uncertainty ranges of sensors", layout_str)
+        self.assertIn("Energy consumption", layout_str)
