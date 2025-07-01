@@ -42,3 +42,4 @@ class DashLayoutContentTests(TestCase):
         self.assertIn("Kazova Farm", layout_str)
         self.assertIn("Uncertainty ranges of sensors", layout_str)
         self.assertIn("Energy consumption", layout_str)
+        self.assertIn("Ventilation specs", layout_str)

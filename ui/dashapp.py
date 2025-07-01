@@ -197,7 +197,34 @@ app.layout = html.Div(
                             ]
                         ),
                         html.H3("Offline data"),
-                        html.Ul([html.Li("Uncertainty ranges of sensors")]),
+                        html.Ul(
+                            [
+                                html.Li("Uncertainty ranges of sensors"),
+                                html.Li("Ventilation specs"),
+                                html.Li("Bedding space"),
+                                html.Li(
+                                    [
+                                        "In Turkey",
+                                        html.Ul(
+                                            [
+                                                html.Li(
+                                                    "Animal data: cow counts, average cow weights"
+                                                ),
+                                                html.Li("Feeding data"),
+                                                html.Li("Animal feed composition data"),
+                                                html.Li("Disease and treatment medication data"),
+                                                html.Li("Ventilation data"),
+                                            ]
+                                        ),
+                                        html.Button(
+                                            "Manual entry (coming soon)",
+                                            disabled=True,
+                                            style={"margin": "10px"},
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        ),
                         html.H3("Calculated data"),
                         html.Ul(
                             [
