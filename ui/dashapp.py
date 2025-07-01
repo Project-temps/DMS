@@ -71,10 +71,6 @@ feature_groups = {
 
 app.layout = html.Div(
     [
-        html.H1(
-            "Dashboard",
-            style={"textAlign": "center"},
-        ),
         # --- Live sensor panel and Environmental footprint ---
         html.Div(
             id="visualization-section",
