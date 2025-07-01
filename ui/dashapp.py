@@ -347,6 +347,7 @@ app.layout = html.Div(
                             [
                                 html.Li("Current electricity usage - Later will be available"),
                                 html.Li("Total consumption - Later will be available"),
+                                html.Li("In Turkey (annual entry): Annual energy consumption."),
                             ]
                         ),
                     ],
