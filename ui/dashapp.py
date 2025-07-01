@@ -71,10 +71,6 @@ feature_groups = {
 
 app.layout = html.Div(
     [
-        html.H1(
-            "Dashboard",
-            style={"textAlign": "center"},
-        ),
         # --- Live sensor panel and Environmental footprint ---
         html.Div(
             id="visualization-section",
@@ -133,6 +129,18 @@ app.layout = html.Div(
                             end_date=max_date,
                             display_format="YYYY-MM-DD HH:mm",
                         ),
+                        html.Button(
+                            "Export CSV",
+                            id="export-button",
+                            n_clicks=0,
+                            style={"margin": "10px"},
+                        ),
+                        dcc.Download(id="download-data"),
+                        dcc.Graph(
+                            id="feature-graph",
+                            style={"height": "70vh", "width": "100%"},
+                            config={"responsive": True},
+                        ),
                         html.H3("Live data"),
                         html.Ul(
                             [
@@ -162,18 +170,6 @@ app.layout = html.Div(
                                 ),
                             ]
                         ),
-                        html.Button(
-                            "Export CSV",
-                            id="export-button",
-                            n_clicks=0,
-                            style={"margin": "10px"},
-                        ),
-                        dcc.Download(id="download-data"),
-                        dcc.Graph(
-                            id="feature-graph",
-                            style={"height": "70vh", "width": "100%"},
-                            config={"responsive": True},
-                        ),
                     ],
                 )
             ],
@@ -195,6 +191,18 @@ app.layout = html.Div(
                             "Additional animal welfare metrics will be integrated later.",
                             className="text-center text-muted",
                         ),
+                        dcc.Graph(
+                            id="thi-graph",
+                            style={"height": "70vh", "width": "100%"},
+                            config={"responsive": True},
+                        ),
+                        html.Button(
+                            "Export THI CSV",
+                            id="export-thi-button",
+                            n_clicks=0,
+                            style={"margin": "10px"},
+                        ),
+                        dcc.Download(id="download-thi-data"),
                         html.H3("Live data"),
                         html.Ul(
                             [
@@ -210,6 +218,30 @@ app.layout = html.Div(
                                     "In Turkey (annual entry): Annual energy consumption."
                                 ),
                                 html.Li("Uncertainty ranges of sensors"),
+                                html.Li("Uncertainty ranges of sensors"),
+                                html.Li("Ventilation specs"),
+                                html.Li("Bedding space"),
+                                html.Li(
+                                    [
+                                        "In Turkey",
+                                        html.Ul(
+                                            [
+                                                html.Li(
+                                                    "Animal data: cow counts, average cow weights"
+                                                ),
+                                                html.Li("Feeding data"),
+                                                html.Li("Animal feed composition data"),
+                                                html.Li("Disease and treatment medication data"),
+                                                html.Li("Ventilation data"),
+                                            ]
+                                        ),
+                                        html.Button(
+                                            "Manual entry (coming soon)",
+                                            disabled=True,
+                                            style={"margin": "10px"},
+                                        ),
+                                    ]
+                                ),
                             ]
                         ),
                         html.H3("Calculated data"),
@@ -221,18 +253,6 @@ app.layout = html.Div(
                                 ),
                             ]
                         ),
-                        dcc.Graph(
-                            id="thi-graph",
-                            style={"height": "70vh", "width": "100%"},
-                            config={"responsive": True},
-                        ),
-                        html.Button(
-                            "Export THI CSV",
-                            id="export-thi-button",
-                            n_clicks=0,
-                            style={"margin": "10px"},
-                        ),
-                        dcc.Download(id="download-thi-data"),
                     ],
                 )
             ],

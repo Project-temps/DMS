@@ -52,3 +52,4 @@ class DashLayoutContentTests(TestCase):
             "In Turkey (annual entry): Annual energy consumption.",
             layout_str,
         )
+        self.assertIn("Ventilation specs", layout_str)
