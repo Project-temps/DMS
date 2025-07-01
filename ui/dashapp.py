@@ -207,17 +207,20 @@ app.layout = html.Div(
                         html.Ul(
                             [
                                 html.Li("Real-time THI values"),
-                                html.Li("Stress indicator sensors - Later will be available"),
-                                html.Li("Activity levels - Later will be available"),
+                                html.Li("•	Concentration of ammonia"),
+                                html.Li("•	Emission of ammonia"),
+                                html.Li("•	Concentration of ammonia"),
+                                html.Li("•	Ventilation rates"),
                             ]
                         ),
                         html.H3("Offline data"),
                         html.Ul(
                             [
+                                html.Li("Ventilation specs"),
+                                html.Li("Bedding space"),
                                 html.Li(
-                                    "In Turkey (annual entry): Annual energy consumption."
+                                    "In Turkey (manual entry):"
                                 ),
-                                html.Li("Uncertainty ranges of sensors"),
                                 html.Li("Uncertainty ranges of sensors"),
                                 html.Li("Ventilation specs"),
                                 html.Li("Bedding space"),
@@ -280,23 +283,14 @@ app.layout = html.Div(
                         html.H3("Live data"),
                         html.Ul(
                             [
-                                html.Li("Milk yield sensors - Later will be available"),
+                                html.Li("Milk yield"),
                                 html.Li(
-                                    "Fat, protein, lactose content - Later will be available"
+                                    "Milk composition"
                                 ),
                             ]
                         ),
                         html.H3("Offline data"),
                         html.Ul([html.Li("Uncertainty ranges of sensors")]),
-                        html.H3("Calculated data"),
-                        html.Ul(
-                            [
-                                html.Li("Mean, min, max, median values"),
-                                html.Li(
-                                    "Percentage of time outside the recommended range (EU-recommended thresholds)"
-                                ),
-                            ]
-                        ),
                     ],
                 )
             ],
@@ -328,17 +322,6 @@ app.layout = html.Div(
                                 html.Li("Farm size."),
                             ]
                         ),
-                        html.H3("Offline data"),
-                        html.Ul([html.Li("Uncertainty ranges of sensors")]),
-                        html.H3("Calculated data"),
-                        html.Ul(
-                            [
-                                html.Li("Mean, min, max, median values"),
-                                html.Li(
-                                    "Percentage of time outside the recommended range (EU-recommended thresholds)"
-                                ),
-                            ]
-                        ),
                     ],
                 )
             ],
@@ -359,22 +342,11 @@ app.layout = html.Div(
                             "Energy consumption data will be displayed here when available.",
                             className="text-center text-muted",
                         ),
-                        html.H3("Live data"),
+                        html.H3("Offline data"),
                         html.Ul(
                             [
                                 html.Li("Current electricity usage - Later will be available"),
                                 html.Li("Total consumption - Later will be available"),
-                            ]
-                        ),
-                        html.H3("Offline data"),
-                        html.Ul([html.Li("Uncertainty ranges of sensors")]),
-                        html.H3("Calculated data"),
-                        html.Ul(
-                            [
-                                html.Li("Mean, min, max, median values"),
-                                html.Li(
-                                    "Percentage of time outside the recommended range (EU-recommended thresholds)"
-                                ),
                             ]
                         ),
                     ],
