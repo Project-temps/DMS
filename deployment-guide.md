@@ -20,7 +20,7 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 
 # Install production dependencies
-pip install -r requirements-prod.txt
+pip install -r requirements.txt
 ```
 
 ## 2. Django Production Settings
@@ -142,7 +142,7 @@ cd C:\path\to\DMS
 git pull
 
 # Install dependencies (if changed)
-pip install -r requirements-prod.txt
+pip install -r requirements.txt
 
 # Collect static files
 python manage.py collectstatic --noinput
